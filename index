@@ -274,7 +274,6 @@ body {
 }
 .chat-box {
   flex: 1;
-  height: 100%;
   background: rgb(57,69,81);
   background-size: cover;       /* fill the box, crop if needed */
   background-position: center;  /* center the image */
@@ -807,6 +806,58 @@ html, body {
   overflow: hidden;
 }
 
+#iosInstallPopup {
+  position: fixed;
+  bottom: 100px; /* further down from top, near bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  border: 2px solid #3b82f6;
+  border-radius: 16px;
+  padding: 20px 30px;
+  font-size: 18px;
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  display: none; /* hidden by default */
+  text-align: center;
+  max-width: 400px; 
+  width: 90%;
+  animation: pulseBorder 1.5s infinite alternate;
+}
+
+#iosInstallPopup .ios-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+#iosInstallPopup .ios-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+#iosInstallPopup #iosYesBtn {
+  background: #22c55e; /* green */
+}
+
+#iosInstallPopup #iosYesBtn:hover {
+  background: #16a34a;
+}
+
+#iosInstallPopup #iosDismissBtn {
+  background: #ef4444; /* red */
+}
+
+#iosInstallPopup #iosDismissBtn:hover {
+  background: #b91c1c;
+}
+
 </style>
 </head>
 <body>
@@ -817,53 +868,14 @@ html, body {
   <button onclick="document.getElementById('rexxPopup').style.display='none'">Got it!</button>
 </div>
 
-<!--IOS INSTALLATION-->
-
-<!--IOS INSTALLATION-->
-<div id="iosInstallPopup" style="display:none;">
-  <div style="
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #111827;
-    color: white;
-    border: 2px solid lime;
-    border-radius: 16px;
-    padding: 24px 32px;
-    max-width: 500px;       /* increased from 300px */
-    width: 90%;             /* keeps responsiveness */
-    text-align: center;
-    z-index: 9999;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-    font-size: 17px;
-  ">
-    <img src="https://i.imgur.com/Po2KS0U.png" alt="Logo" style="width:50px;height:50px;margin-bottom:12px;border-radius:10px;">
-    <div style="margin-bottom:14px; font-size: 16px;">
-      Install this app on your home screen for quick access and better performance.
-    </div>
-    <button id="iosInstallBtn" style="
-      padding: 12px 20px;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 8px;
-    ">Install</button>
-    
-    <button id="iosInstallClose" style="
-      padding: 12px 20px;
-      background: #ef4444;
-      color:white;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-    ">Dismiss</button>
+<div id="iosInstallPopup">
+  Want to add this to your <span class="rexx-highlight">Home Screen</span> for quicker access and better performance?
+  <br>
+  <div class="ios-buttons">
+    <button id="iosYesBtn">Yes</button>
+    <button id="iosDismissBtn">Dismiss</button>
   </div>
 </div>
-
 
 <!-- MOBILE LAYOUT -->
 <div class="top-mobile-panel collapsed" id="topMobilePanel">
@@ -1233,53 +1245,6 @@ collapseHandle.addEventListener('click', () => {
   setTimeout(updateChatBoxHeight, 310);
 });
 window.addEventListener('resize', updateChatBoxHeight);
-
-// ===== MOBILE KEYBOARD DYNAMIC FIX =====
-function setupKeyboardHandling() {
-  const phone = document.getElementById('phone');
-  const chatContainer = document.querySelector('.chat-box-container');
-
-  // Store initial top and bottom positions
-  const initialPhoneTop = phone.offsetTop;
-  const initialChatBottom = parseFloat(getComputedStyle(chatContainer).bottom);
-
-  // Function to reset positions
-  function resetPositions() {
-    phone.style.top = `${initialPhoneTop}px`;
-    chatContainer.style.bottom = `${initialChatBottom}px`;
-  }
-
-  // Adjust positions dynamically when viewport resizes
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', () => {
-      // Keyboard is considered open if viewport height shrinks significantly
-      const keyboardOpen = window.visualViewport.height < window.innerHeight - 100; // threshold 100px
-      if (keyboardOpen) {
-        // Move phone up above keyboard
-        const keyboardHeight = window.innerHeight - window.visualViewport.height;
-        phone.style.top = `${initialPhoneTop - keyboardHeight / 2}px`;
-        chatContainer.style.bottom = `${bottomInputs.offsetHeight + 12}px`;
-      } else {
-        // Keyboard closed, reset
-        resetPositions();
-      }
-    });
-  }
-
-  // Fallback for older browsers: focus/blur events
-  const inputs = document.querySelectorAll('input, textarea');
-  inputs.forEach(input => {
-    input.addEventListener('focus', () => {
-      phone.style.top = '20px';
-      chatContainer.style.bottom = `${bottomInputs.offsetHeight + 12}px`;
-    });
-    input.addEventListener('blur', () => {
-      resetPositions();
-    });
-  });
-}
-
-setupKeyboardHandling();
 
 // ==================== REST OF YOUR ORIGINAL SCRIPT (unchanged) ====================
 function populateDropdowns() {
@@ -1683,33 +1648,45 @@ function closeRexxPopup() {
 // Show after 10 seconds
 setTimeout(showRexxPopup, 10000);
 
-// ===== iOS "Add to Home Screen" Popup =====
-function isiOS() {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+// Detect iOS
+function isIos() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
+// Detect if in standalone mode
 function isInStandaloneMode() {
   return ('standalone' in window.navigator) && window.navigator.standalone;
 }
 
-if (isiOS() && !isInStandaloneMode()) {
-  // Show the popup after a short delay (user sees page first)
-  setTimeout(() => {
-    const popup = document.getElementById('iosInstallPopup');
-    popup.style.display = 'block';
+window.addEventListener('load', () => {
+  if (isIos() && !isInStandaloneMode()) {
+    setTimeout(() => {
+      const iosPopup = document.getElementById('iosInstallPopup');
+      iosPopup.style.display = 'block';
 
-    const closeBtn = document.getElementById('iosInstallClose');
-    const installBtn = document.getElementById('iosInstallBtn');
+      // Yes button
+      document.getElementById('iosYesBtn').addEventListener('click', () => {
+        iosPopup.innerHTML = `
+          <strong>How to add to Home Screen:</strong>
+          <ol style="text-align:left; margin-top:10px;">
+            <li>Tap the <strong>Share</strong> icon in Safari.</li>
+            <li>Scroll down and select <strong>"Add to Home Screen"</strong>.</li>
+            <li>Confirm by tapping <strong>Add</strong>.</li>
+          </ol>
+          <button id="iosDoneBtn" style="margin-top:10px; padding:8px 16px; border:none; border-radius:8px; background:#22c55e; color:white; font-weight:bold; cursor:pointer;">Done</button>
+        `;
+        document.getElementById('iosDoneBtn').addEventListener('click', () => {
+          iosPopup.style.display = 'none';
+        });
+      });
 
-    closeBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    installBtn.addEventListener('click', () => {
-      alert("Tap the share icon (⬆) and then 'Add to Home Screen' to install this app.");
-    });
-  }, 2000); // 2 second delay
-}
+      // Dismiss button closes popup
+      document.getElementById('iosDismissBtn').addEventListener('click', () => {
+        iosPopup.style.display = 'none';
+      });
+    }, 2000);
+  }
+});
 </script>
 </body>
 </html>
