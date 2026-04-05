@@ -274,6 +274,7 @@ body {
 }
 .chat-box {
   flex: 1;
+  height: 100%;
   background: rgb(57,69,81);
   background-size: cover;       /* fill the box, crop if needed */
   background-position: center;  /* center the image */
