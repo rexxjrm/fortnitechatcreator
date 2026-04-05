@@ -1480,22 +1480,31 @@ window.addEventListener('resize', () => {
 function addExportLogo() {
   const container = document.querySelector('.chat-box-container');
   if (document.getElementById('exportLogo')) return;
+
   const logo = document.createElement('div');
   logo.id = 'exportLogo';
+
   logo.style.position = 'absolute';
   logo.style.bottom = '10px';
-  logo.style.left = '50%';
-  logo.style.transform = 'translateX(-50%)';
+
+  /* ✅ FIXED CENTERING (no transform) */
+  logo.style.left = '0';
+  logo.style.right = '0';
+  logo.style.margin = '0 auto';
+
   logo.style.width = '64px';
   logo.style.height = '64px';
+
   logo.style.backgroundImage = 'url("https://i.imgur.com/Po2KS0U.png")';
   logo.style.backgroundSize = 'contain';
   logo.style.backgroundRepeat = 'no-repeat';
   logo.style.backgroundPosition = 'center';
+
   logo.style.opacity = '0.4';
   logo.style.pointerEvents = 'none';
   logo.style.zIndex = '0';
-  container.insertBefore(logo, container.firstChild);
+
+  container.appendChild(logo);
 }
 function removeExportLogo() {
   const logo = document.getElementById('exportLogo');
