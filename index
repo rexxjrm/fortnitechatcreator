@@ -1688,5 +1688,33 @@ window.addEventListener('load', () => {
   }
 });
 </script>
+<!-- PayPal SDK - load only once -->
+<script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function renderPayPalButton(target) {
+    PayPal.Donation.Button({
+      env:'production',
+      hosted_button_id:'BK4CREJ6G5B7J',
+      image: {
+        src:'https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif',
+        alt:'Donate with PayPal button',
+        title:'PayPal - The safer, easier way to pay online!',
+      }
+    }).render(target);
+  }
+
+  // Render mobile donate button if container exists
+  if (document.getElementById('donate-button')) {
+    renderPayPalButton('#donate-button');
+  }
+
+  // Render desktop donate button if container exists
+  if (document.getElementById('donate-button-desktop')) {
+    renderPayPalButton('#donate-button-desktop');
+  }
+});
+</script>
 </body>
 </html>
