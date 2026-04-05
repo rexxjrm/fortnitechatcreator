@@ -1698,6 +1698,41 @@ window.addEventListener('load', () => {
     }, 2000);
   }
 });
+
+// INSPECT ELEMENT PREVENTION (PASTE AT BOTTOM OF HTML SCRIPT)
+
+document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    
+});
+
+document.addEventListener('keydown', function(e) {
+    // F12
+    if(e.key === 'F12') {
+        e.preventDefault();
+        
+    }
+    // Ctrl+Shift+I / J / C
+    if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) {
+        e.preventDefault();
+        
+    }
+});
+
+let devtoolsOpen = false;
+setInterval(() => {
+    const threshold = 160;
+    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+        if (!devtoolsOpen) {
+            devtoolsOpen = true;
+            console.warn('DevTools detected!');
+            // Optional: redirect, blur, or hide content
+            // window.location.href = "about:blank";
+        }
+    } else {
+        devtoolsOpen = false;
+    }
+}, 1000);
 </script>
 </body>
 </html>
