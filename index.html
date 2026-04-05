@@ -376,14 +376,10 @@ body {
   position: relative;
 }
 .message img {
-  max-width: 100%;
-  max-height: 250px; /* 👈 KEY FIX */
-  width: auto;
-  height: auto;
-  object-fit: contain; /* ensures full image is visible */
-  display: block;
-  border-radius: 8px;
-  outline: 2px solid white;
+  max-width:100%;
+  border-radius:8px;
+  outline:2px solid white;
+  z-index: 3;
 }
 .bottom-inputs {
   background: #111827;
@@ -1243,26 +1239,56 @@ collapseHandle.addEventListener('click', () => {
 });
 
 // ==================== IMAGE UPLOAD HANDLER ====================
-function triggerFile(side) {
-  document.getElementById(`${side}FileInput`).click();
-}
-
 function handleFileUpload(side) {
   const fileInput = document.getElementById(`${side}FileInput`);
   const urlInput = document.getElementById(`${side}Image`);
-  
+
   fileInput.addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      urlInput.value = e.target.result; // set data URL as input value
+
+    // If file is small enough → use directly
+    if (file.size < 5 * 1024 * 1024) { // under 5MB
+      urlInput.value = URL.createObjectURL(file);
+      return;
+    }
+
+    // ⚠️ Large file → safely resize
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+
+      // Limit max dimension (SAFE for mobile)
+      const MAX_SIZE = 2048;
+
+      let { width, height } = img;
+
+      if (width > height) {
+        if (width > MAX_SIZE) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        }
+      } else {
+        if (height > MAX_SIZE) {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      urlInput.value = canvas.toDataURL('image/jpeg', 0.85); // compressed
     };
-    reader.readAsDataURL(file);
   });
 }
 
-// Initialize both
+// Initialize for both sides
 handleFileUpload('left');
 handleFileUpload('right');
 
