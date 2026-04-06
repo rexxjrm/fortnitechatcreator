@@ -819,11 +819,19 @@ html, body {
   width: 64px;
   height: 64px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 .social-icons img:hover {
   transform: scale(1.1);
 }
+
+/* Brightness increase on hover — DESKTOP ONLY */
+@media (min-width: 769px) {
+  .social-icons img:hover {
+    filter: brightness(1.5);
+  }
+}
+
 /* Mobile ONLY */
 @media (max-width: 768px) {
   .social-icons {
