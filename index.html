@@ -917,6 +917,41 @@ html, body {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex; }
 }
+
+/* Custom autocomplete dropdown - unlimited options */
+.character-autocomplete {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.character-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1f2937;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10000;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  display: none;
+  margin-top: 4px;
+}
+.character-suggestions div {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.character-suggestions div:hover,
+.character-suggestions div.active {
+  background: #3b82f6;
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -945,24 +980,30 @@ html, body {
   </div>
   <div class="receiver-sender-container">
 
-  <div class="control-group">
-    <label>Receiver:</label>
-    <div class="avatar-input-row">
-      <img id="leftAvatarPreview" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
-      <input list="leftCharacterList" id="leftCharacterSearch" placeholder="Search Receiver">
+ <!-- Receiver (Mobile) -->
+<div class="control-group">
+  <label>Receiver:</label>
+  <div class="avatar-input-row">
+    <img id="leftAvatarPreview" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
+    <div class="character-autocomplete" style="flex: 1;">
+      <input id="leftCharacterSearch" placeholder="Search Receiver" autocomplete="off">
+      <div id="leftSuggestions" class="character-suggestions"></div>
     </div>
-    <input type="text" id="senderNickname" placeholder="Receiver Nickname" maxlength="16">
-    <datalist id="leftCharacterList"></datalist>
   </div>
+  <input type="text" id="senderNickname" placeholder="Receiver Nickname" maxlength="16">
+</div>
 
-  <div class="control-group">
-    <label>Sender:</label>
-    <div class="avatar-input-row">
-      <img id="rightAvatarPreview" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
-      <input list="rightCharacterList" id="rightCharacterSearch" placeholder="Search Sender">
+<!-- Sender (Mobile) -->
+<div class="control-group">
+  <label>Sender:</label>
+  <div class="avatar-input-row">
+    <img id="rightAvatarPreview" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
+    <div class="character-autocomplete" style="flex: 1;">
+      <input id="rightCharacterSearch" placeholder="Search Sender" autocomplete="off">
+      <div id="rightSuggestions" class="character-suggestions"></div>
     </div>
-    <datalist id="rightCharacterList"></datalist>
   </div>
+</div>
 
 </div>
   <div class="control-group">
@@ -1005,23 +1046,30 @@ title:'PayPal - The safer, easier way to pay online!',
 <div class="controls">
 <!-- Desktop Logo -->
   <img id="desktopLogo" src="https://i.imgur.com/9XfiRSo.png" alt="Logo">
-  <div class="control-group">
-    <label>Receiver:</label>
-    <div style="display:flex; align-items:center; gap:5px;">
-      <img id="leftAvatarPreview2" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
-      <input list="leftCharacterList2" id="leftCharacterSearch2" placeholder="Search Receiver">
+  <!-- Receiver (Desktop) -->
+<div class="control-group">
+  <label>Receiver:</label>
+  <div style="display:flex; align-items:center; gap:5px;">
+    <img id="leftAvatarPreview2" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
+    <div class="character-autocomplete">
+      <input id="leftCharacterSearch2" placeholder="Search Receiver" autocomplete="off">
+      <div id="leftSuggestions2" class="character-suggestions"></div>
     </div>
-    <input type="text" id="senderNickname2" placeholder="Nickname" maxlength="16">
-    <datalist id="leftCharacterList2"></datalist>
   </div>
-  <div class="control-group">
-    <label>Sender:</label>
-    <div style="display:flex; align-items:center; gap:5px;">
-      <img id="rightAvatarPreview2" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
-      <input list="rightCharacterList2" id="rightCharacterSearch2" placeholder="Search Sender">
+  <input type="text" id="senderNickname2" placeholder="Nickname" maxlength="16">
+</div>
+
+<!-- Sender (Desktop) -->
+<div class="control-group">
+  <label>Sender:</label>
+  <div style="display:flex; align-items:center; gap:5px;">
+    <img id="rightAvatarPreview2" class="avatar" src="https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png">
+    <div class="character-autocomplete">
+      <input id="rightCharacterSearch2" placeholder="Search Sender" autocomplete="off">
+      <div id="rightSuggestions2" class="character-suggestions"></div>
     </div>
-    <datalist id="rightCharacterList2"></datalist>
   </div>
+</div>
   <div class="control-group">
     <label>Background:</label>
     <input type="color" id="bgColor2" value="#394551">
@@ -1137,6 +1185,7 @@ renderPayPalButton('#donate-button-desktop');
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 // ==================== CHARACTERS ====================
+// ==================== CHARACTERS (unlimited now) ====================
 const characters = {
   "Jonesy":"https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png",
   "Hush":"https://static.wikia.nocookie.net/fortnite/images/d/d8/Hush_%28v32.00%29_-_Outfit_-_Fortnite.png",
@@ -1153,7 +1202,111 @@ const characters = {
   "Rosalind":"https://static.wikia.nocookie.net/fortnite/images/c/c2/Rosalind_-_Outfit_-_Fortnite.png",
   "Sanni":"https://static.wikia.nocookie.net/fortnite/images/a/a7/Sanni_-_Outfit_-_Fortnite.png",
   "Aranza":"https://static.wikia.nocookie.net/fortnite/images/f/f1/Aranza_-_Outfit_-_Fortnite.png",
+  "Faun":"https://static.wikia.nocookie.net/fortnite/images/5/5d/Faun_-_Outfit_-_Fortnite.png",
+  "Jawbreaker":"https://static.wikia.nocookie.net/fortnite/images/9/95/Jawbreaker_%28v32.00%29_-_Outfit_-_Fortnite.png",
+  "Takara":"https://static.wikia.nocookie.net/fortnite/images/e/e1/Takara_%28v30.10%29_-_Outfit_-_Fortnite.png",
+  "Brite Agent":"https://static.wikia.nocookie.net/fortnite/images/c/cf/Brite_Agent_-_Outfit_-_Fortnite.png",
+  "Festival Lace":"https://static.wikia.nocookie.net/fortnite/images/d/d0/Festival_Lace_-_Outfit_-_Fortnite.png",
+  "Starlie":"https://static.wikia.nocookie.net/fortnite/images/3/30/Starlie_-_Outfit_-_Fortnite.png",
+  "Ruby":"https://static.wikia.nocookie.net/fortnite/images/6/6d/Ruby_-_Outfit_-_Fortnite.png",
+  "Ruby Shadows":"https://static.wikia.nocookie.net/fortnite/images/d/d9/Ruby_Shadows_-_Outfit_-_Fortnite.png",
+  "Dark Ruby":"https://static.wikia.nocookie.net/fortnite/images/4/45/Dark_Ruby_-_Outfit_-_Fortnite.png",
+  "Crystal":"https://static.wikia.nocookie.net/fortnite/images/6/64/Crystal_%28New%29_-_Outfit_-_Fortnite.png",
+  "Kyra":"https://static.wikia.nocookie.net/fortnite/images/9/99/Kyra_%28v20.00%29_-_Outfit_-_Fortnite.png",
+  "Bandolette":"https://static.wikia.nocookie.net/fortnite/images/7/73/Bandolette_%28v30.00%29_-_Outfit_-_Fortnite.png",
+  "Slurp Bandolette":"https://static.wikia.nocookie.net/fortnite/images/2/28/Slurp_Bandolette_-_Outfit_-_Fortnite.png",
+  "Heart-Stopper":"https://static.wikia.nocookie.net/fortnite/images/c/cc/Heart-Stopper_-_Outfit_-_Fortnite.png",
+  "Scarlet Serpent":"https://static.wikia.nocookie.net/fortnite/images/a/a8/Scarlet_Serpent_-_Outfit_-_Fortnite.png",
+  "Yellowjacket":"https://static.wikia.nocookie.net/fortnite/images/6/65/Yellowjacket_-_Outfit_-_Fortnite.png",
+  "Yulejacket":"https://static.wikia.nocookie.net/fortnite/images/e/e1/Yulejacket_-_Outfit_-_Fortnite.png",
+  "Blue Team Leader":"https://static.wikia.nocookie.net/fortnite/images/a/a4/Blue_Team_Leader_%28v34.00%29_-_Outfit_-_Fortnite.png",
+  "Bone Ravage":"https://static.wikia.nocookie.net/fortnite/images/a/a9/Bone_Ravage_-_Outfit_-_Fortnite.png",
+  "Clara":"https://static.wikia.nocookie.net/fortnite/images/c/c9/Clara_-_Outfit_-_Fortnite.png",
+  "Lana Llane":"https://static.wikia.nocookie.net/fortnite/images/5/5e/Lana_Llane_-_Outfit_-_Fortnite.png",
+  "NeuraLynx":"https://static.wikia.nocookie.net/fortnite/images/a/a7/NeuraLynx_-_Outfit_-_Fortnite.png",
+  "Reverie":"https://static.wikia.nocookie.net/fortnite/images/6/68/Reverie_-_Outfit_-_Fortnite.png",
+  "Runway Racer":"https://static.wikia.nocookie.net/fortnite/images/9/9e/Runway_Racer_-_Outfit_-_Fortnite.png",
+  "Skull Scout":"https://static.wikia.nocookie.net/fortnite/images/d/de/Skull_Scout_-_Outfit_-_Fortnite.png",
+  "Vivi Chroma":"https://static.wikia.nocookie.net/fortnite/images/2/2e/Vivi_Chroma_-_Outfit_-_Fortnite.png",
+  "Vivica Saint":"https://static.wikia.nocookie.net/fortnite/images/1/1c/Vivica_Saint_-_Outfit_-_Fortnite.png",
+  "Lace":"https://static.wikia.nocookie.net/fortnite/images/e/e5/Lace_%28v31.30%29_-_Outfit_-_Fortnite.png",
+  "Graveheart":"https://static.wikia.nocookie.net/fortnite/images/d/d6/Graveheart_-_Outfit_-_Fortnite.png",
+  "Rally Raider":"https://static.wikia.nocookie.net/fortnite/images/4/4e/Rally_Raider_-_Outfit_-_Fortnite.png",
+  
+  // Add unlimited new characters here, example:
+  // ,"New Skin Name": "https://static.wikia.nocookie.net/fortnite/images/...png"
 };
+
+// ==================== CUSTOM AUTOCOMPLETE ====================
+let characterNames = Object.keys(characters);
+
+function showSuggestions(input, suggestionsContainer) {
+  const value = input.value.toLowerCase().trim();
+  suggestionsContainer.innerHTML = '';
+
+  if (!value) {
+    suggestionsContainer.style.display = 'none';
+    return;
+  }
+
+  const filtered = characterNames.filter(name => 
+    name.toLowerCase().includes(value)
+  );
+
+  if (filtered.length === 0) {
+    suggestionsContainer.style.display = 'none';
+    return;
+  }
+
+  filtered.forEach(name => {
+    const div = document.createElement('div');
+    div.textContent = name;
+
+    // Desktop fix: Use click + set value + dispatch events
+    div.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      // Force the value change
+      input.value = name;
+
+      // Hide dropdown
+      suggestionsContainer.style.display = 'none';
+
+      // Important for desktop: trigger input and change events
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Update everything (avatars, header, sync)
+      updateAll();
+    });
+
+    suggestionsContainer.appendChild(div);
+  });
+
+  suggestionsContainer.style.display = 'block';
+}
+
+function attachAutocomplete(input, suggestionsContainer) {
+  input.addEventListener('input', () => showSuggestions(input, suggestionsContainer));
+
+  // Shorter blur delay for desktop
+  input.addEventListener('blur', () => {
+    setTimeout(() => {
+      suggestionsContainer.style.display = 'none';
+    }, 150);
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') suggestionsContainer.style.display = 'none';
+  });
+}
+
+// Attach to all search inputs
+attachAutocomplete(document.getElementById('leftCharacterSearch'), document.getElementById('leftSuggestions'));
+attachAutocomplete(document.getElementById('rightCharacterSearch'), document.getElementById('rightSuggestions'));
+attachAutocomplete(document.getElementById('leftCharacterSearch2'), document.getElementById('leftSuggestions2'));
+attachAutocomplete(document.getElementById('rightCharacterSearch2'), document.getElementById('rightSuggestions2'));
 // ==================== DOM ELEMENTS ====================
 const topMobilePanel = document.getElementById('topMobilePanel');
 const topCollapseHandle = document.getElementById('topCollapseHandle');
@@ -1309,22 +1462,22 @@ collapseHandle.addEventListener('click', () => {
 window.addEventListener('resize', updateChatBoxHeight);
 
 // ==================== REST OF YOUR ORIGINAL SCRIPT (unchanged) ====================
-function populateDropdowns() {
-  const lists = [
-    document.getElementById('leftCharacterList'), document.getElementById('rightCharacterList'),
-    document.getElementById('leftCharacterList2'), document.getElementById('rightCharacterList2')
-  ];
-  lists.forEach(list => list.innerHTML = '');
-  for (let c in characters) {
-    lists.forEach(list => list.innerHTML += `<option value='${c}'>`);
-  }
-}
+
 function updateDropdownAvatars() {
-  const defaultAvatar = characters["Jonesy"];
-  leftAvatarPreview.src = characters[leftCharacterSearch.value.trim()] || defaultAvatar;
-  rightAvatarPreview.src = characters[rightCharacterSearch.value.trim()] || defaultAvatar;
-  document.getElementById('leftAvatarPreview2').src = leftAvatarPreview.src;
-  document.getElementById('rightAvatarPreview2').src = rightAvatarPreview.src;
+  const defaultAvatar = characters["Jonesy"] || "";
+  
+  // Use the actual current input values
+  const leftVal = (leftCharacterSearch.value || "").trim();
+  const rightVal = (rightCharacterSearch.value || "").trim();
+
+  leftAvatarPreview.src = characters[leftVal] || defaultAvatar;
+  rightAvatarPreview.src = characters[rightVal] || defaultAvatar;
+
+  // Sync desktop previews
+  const leftPrev2 = document.getElementById('leftAvatarPreview2');
+  const rightPrev2 = document.getElementById('rightAvatarPreview2');
+  if (leftPrev2) leftPrev2.src = leftAvatarPreview.src;
+  if (rightPrev2) rightPrev2.src = rightAvatarPreview.src;
 }
 function updateColors() {
   if (!chatBox.dataset.customBg) {
@@ -1781,7 +1934,6 @@ document.getElementById('rightFileInput').addEventListener('change', (e) => {
 // Initialize
 loadEmojis();
 document.addEventListener('keydown', e => { if(e.key === 'Enter') addMessage(); });
-populateDropdowns();
 updateAll();
 
 function showRexxPopup() {
