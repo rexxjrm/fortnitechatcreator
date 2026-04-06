@@ -4,23 +4,28 @@
 <meta charset="UTF-8">
 <title>Fortnite Chat Creator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, interactive-widget=resizes-content, user-scalable=no">
-
 <meta property="og:title" content="Fortnite Chat Creator">
 <meta property="og:type" content="article" />
 <meta property="og:description" content="Create custom chats between your favorite Fortnite characters!">
 <meta property="og:image" content="https://i.imgur.com/Po2KS0U.png">
 <meta property="og:url" content="https://rexxjrm.github.io/fortnitechatcreator/">
-
 <meta name="twitter:title" content="Fortnite Chat Creator">
 <meta name="twitter:description" content="Create custom chats between your favorite Fortnite characters!">
 <meta name="twitter:image" content="https://i.imgur.com/Po2KS0U.png">
 <meta name="twitter:card" content="summary_large_image">
-
 <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/HBc0ieG.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://i.imgur.com/HBc0ieG.png">
 <!-- Apple Touch Icon (iOS home screen) -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/zfDEQ4L.png">
+
+<!-- ==================== FONT LINKS ==================== -->
+<!-- Default (already used) -->
 <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+<!-- New fonts requested by user -->
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Vend+Sans:wght@397&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 <style>
 @font-face {
   font-family: 'Burbank';
@@ -30,7 +35,6 @@
   font-family: 'Burbank', Arial, sans-serif;
   box-sizing: border-box;
 }
-
 body {
   margin:0;
   background:#0b0f1a;
@@ -51,7 +55,6 @@ body {
   pointer-events: none;
   padding-top:10px;
 }
-
 /* ==================== NEW TOP COLLAPSIBLE CONTAINER (Mobile Only) ==================== */
 .top-mobile-panel {
   position: fixed;
@@ -91,7 +94,6 @@ body {
 .top-collapse-handle:hover {
   background: #4b5563;
 }
-
 /* Original burger and mobile menu */
 .top-mobile-panel .control-group {
   display: flex;
@@ -99,11 +101,9 @@ body {
   gap: 6px;
   margin-bottom: 10px;
 }
-
 .top-mobile-panel .control-group label {
   font-weight: 500;
 }
-
 .top-mobile-panel .control-group input,
 .top-mobile-panel .control-group select,
 .top-mobile-panel .control-group input[type="file"],
@@ -117,36 +117,31 @@ body {
   font-size: 15px;
   box-sizing: border-box;
 }
-
 .top-mobile-panel .control-group div {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-
 /* Taller color pickers */
 .top-mobile-panel .control-group input[type="color"] {
-  height: 38px;  /* taller than default */
+  height: 38px; /* taller than default */
   padding: 0;
   border-radius: 8px;
   cursor: pointer;
   width: 100%;
 }
-
 /* Avatar + input row inside top mobile panel */
 .top-mobile-panel .control-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .top-mobile-panel .control-group .avatar-input-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 /* Avatar image styling */
 .top-mobile-panel .avatar-input-row img.avatar {
   width: 42px;
@@ -155,7 +150,6 @@ body {
   border: 2px solid white;
   flex-shrink: 0;
 }
-
 /* Search input next to avatar */
 .top-mobile-panel .avatar-input-row input {
   flex: 1;
@@ -169,7 +163,6 @@ body {
 .mobile-menu {
   display: none !important; /* Fully disabled */
 }
-
 .controls {
   background:#111827;
   padding:15px;
@@ -227,7 +220,6 @@ body {
   background: rgba(0,0,0,0.3);
   border-radius:20px;
   flex-shrink: 0;
-
 }
 .header-avatar-wrapper {
   position: relative;
@@ -286,18 +278,26 @@ body {
 .chat-box {
   flex: 1;
   background: rgb(57,69,81);
-  background-size: cover;       /* fill the box, crop if needed */
-  background-position: center;  /* center the image */
-  background-attachment: fixed; /* keep it fixed, doesn't scale with height */
+  background-size: cover;        /* This creates the zoom + crop effect */
+  background-position: center center;
   background-repeat: no-repeat;
   padding: 15px;
   padding-bottom: 0px;
   overflow-y: auto;
   overflow-x: hidden;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   scrollbar-width: thin;
   position: relative;
+}
+
+/* Critical mobile fix for dynamic height (when bottom panel expands/collapses) */
+@media (max-width: 768px) {
+  .chat-box {
+    background-attachment: scroll;   /* Prevents shrinking on height change */
+    background-size: cover;          /* Reinforces the zoom/crop */
+    min-height: 0;                   /* Helps flex items shrink properly */
+  }
 }
 .chat-box::-webkit-scrollbar {
   width: 6px;
@@ -323,7 +323,6 @@ body {
   z-index: 3;
   position: relative;
 }
-
 /* Delete button inside bubble */
 .delete-btn {
   position: absolute;
@@ -336,19 +335,16 @@ body {
   display: none; /* hidden by default */
   z-index: 10;
 }
-
 /* Position X on top-right for receiver bubbles */
 .message-row.left .message .delete-btn {
   top: -10px;
   right: -10px;
 }
-
 /* Position X on top-left for sender bubbles */
 .message-row.right .message .delete-btn {
   top: -10px;
   left: -10px;
 }
-
 /* Show delete button on hover over the bubble */
 .message:hover .delete-btn {
   display: flex;
@@ -456,15 +452,14 @@ button {
   background: orange;
   color: white;
 }
-
 /* Make all buttons in the same row equal width */
 .bottom-inputs .inputs button {
-  flex: 1 1 0;             /* all buttons take equal space */
-  max-width: none;          /* ignore text content width */
-  height: 44px;             /* uniform height */
-  padding: 0;               /* optional, inner padding handled with flex */
+  flex: 1 1 0; /* all buttons take equal space */
+  max-width: none; /* ignore text content width */
+  height: 44px; /* uniform height */
+  padding: 0; /* optional, inner padding handled with flex */
   display: flex;
-  justify-content: center;  /* center the text */
+  justify-content: center; /* center the text */
   align-items: center;
   font-size: 15px;
   box-sizing: border-box;
@@ -478,33 +473,31 @@ button {
 }
 /* Mobile adjustments */
 @media (max-width: 768px) {
-
 .top-image-container {
     width: 100%;
     display: flex;
-    margin-bottom: 20px;      /* space below for receiver */
-    margin-top: 12px;         /* pull it slightly higher */
+    margin-bottom: 20px; /* space below for receiver */
+    margin-top: 12px; /* pull it slightly higher */
   }
   .burger { display: none; } /* Old burger hidden */
   .top-mobile-panel { display: flex; } /* New top panel shown */
   .controls { display: none; }
   .phone-container {
-    position: relative;    /* keep container in normal flow */
-    top: 0;                /* don’t move it */
+    position: relative; /* keep container in normal flow */
+    top: 0; /* don’t move it */
     bottom: 0;
     width: 100%;
     max-width: 390px;
-    margin: 0 auto;        /* center horizontally */
+    margin: 0 auto; /* center horizontally */
   }
-
   .phone {
-    position: absolute;    /* stretch inside container */
-    top: 48px;             /* pull down from top of container */
-    bottom: 48px;         /* leave space for bottom-inputs */
+    position: absolute; /* stretch inside container */
+    top: 48px; /* pull down from top of container */
+    bottom: 48px; /* leave space for bottom-inputs */
     left: 0;
     right: 0;
-    height: auto;          /* let top/bottom define height */
-	box-shadow: none;
+    height: auto; /* let top/bottom define height */
+box-shadow: none;
   }
   .chat-box-container {
     position: absolute;
@@ -512,14 +505,14 @@ button {
     left: 12px;
     right: 12px;
     transition: bottom 0.3s ease;
-	bottom: 120px; /* leave some spacing from bottom-inputs */
+bottom: 120px; /* leave some spacing from bottom-inputs */
   }
   .bottom-inputs {
     position: fixed;
     bottom: 0px;
     left: 12px;
     right: 12px;
-	border-radius: 20px 20px 0 0; /* keeps top corners rounded */
+border-radius: 20px 20px 0 0; /* keeps top corners rounded */
   }
   #leftAvatarPreview, #rightAvatarPreview {
     width: 42px;
@@ -533,10 +526,10 @@ button {
   @media (max-width: 768px) {
   /* Remove absolute positioning */
   #topLeftImage {
-    position: static;       /* back in normal flow */
+    position: static; /* back in normal flow */
     display: block;
-    margin: 0 auto 12px;    /* centers it horizontally and gives bottom spacing */
-    width: 80%;             /* adjust size */
+    margin: 0 auto 12px; /* centers it horizontally and gives bottom spacing */
+    width: 80%; /* adjust size */
     max-width: 260px;
     height: auto;
     pointer-events: none;
@@ -598,7 +591,6 @@ button {
   flex: 1;
   position: relative;
 }
-
 .control-group {
   display: flex;
   align-items: center;
@@ -606,12 +598,39 @@ button {
   flex-wrap: nowrap; /* IMPORTANT */
 }
 
+/* ==================== MESSAGE FONT CONTROL GROUP ==================== */
+/* Desktop: horizontal (label next to dropdown) so it sits nicely next to Sender Bubble color */
+.control-group.font-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+/* Mobile: inherits column layout from .top-mobile-panel .control-group so dropdown appears UNDER Sender Bubble color */
+@media (max-width: 767px) {
+  .control-group.font-control label {
+    min-width: 40px; /* reserve space for short label */
+    margin: 0;
+  }
+  .control-group.font-control select {
+    flex-grow: 1; /* dropdown fills remaining width */
+  }
+}
+
+/* Message Font control group - select styling */
+.control-group.font-control select {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Burbank'; /* default font */
+}
+
 /* Mobile-only: hide emoji buttons */
 @media (max-width: 768px) {
   .emoji-btn {
     display: none !important;
   }
-
   /* Optional: remove padding-right on inputs so text uses full width */
   .bottom-inputs .inputs > div input {
     padding-right: 12px; /* normal padding without emoji space */
@@ -623,29 +642,25 @@ button {
   align-items: center;
 }ckground: #ffb347;
 }
-
 #donate-button-desktop {
   display: flex;
   position: absolute;
   padding-left: 30px;
   margin-left: auto;
 }
-
 #desktopLogo {
   position: relative;
-  width: 360px;     /* your original image width */
-  height: auto;     /* keeps aspect ratio */
-  margin-right: 12px; 
-  flex-shrink: 0;   /* prevents flexbox from shrinking it */
+  width: 360px; /* your original image width */
+  height: auto; /* keeps aspect ratio */
+  margin-right: 12px;
+  flex-shrink: 0; /* prevents flexbox from shrinking it */
 }
-
 .input-with-btn {
   position: relative;
   width: 100%;
   height: 44px; /* fixed height */
   box-sizing: border-box; /* include padding in height */
 }
-
 .input-with-btn input {
   width: 100%;
   height: 100%; /* fill parent */
@@ -657,7 +672,6 @@ button {
   font-size: 15px;
   box-sizing: border-box; /* critical to prevent shrink */
 }
-
 .input-with-btn .upload-btn {
   position: absolute;
   top: 0;
@@ -673,79 +687,14 @@ button {
   align-items: center;
   justify-content: center;
 }
-
 .input-with-btn .upload-btn:hover {
   background: #2563eb; /* slightly darker blue on hover */
 }
-
-/* Message Font control group */
-.control-group.font-control {
-  display: flex;
-  flex-direction: column; /* label on top by default */
-  margin: 0;
-  gap: 0.25rem; /* tight spacing */
+/*VIEWPORT FIX*/
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
-
-/* Label styling */
-.control-group.font-control label {
-  font-weight: 500;
-  font-size: 0.9rem;
-  white-space: nowrap; /* prevent wrapping */
-}
-
-/* Dropdown styling */
-.control-group.font-control select {
-  padding: 0.4rem 0.5rem;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: 'Burbank'; /* default font */
-}
-
-/* MOBILE STYLES */
-@media (max-width: 767px) {
-  .control-group.font-control {
-    flex-direction: row;       /* label next to dropdown */
-    align-items: center;
-    gap: 0.5rem;
-	margin-bottom: 12px;
-  }
-
-  .control-group.font-control label {
-    min-width: 40px;           /* reserve space for short label like "Font:" */
-    margin: 0;
-  }
-
-  .control-group.font-control select {
-    flex-grow: 1;              /* dropdown fills remaining width */
-  }
-}
-
-.top-mobile-panel .avatar-input-row {
-  display: flex;
-  align-items: center;
-  width: 100%;      /* FULL WIDTH */
-  gap: 10px;
-}
-
-.top-mobile-panel .avatar-input-row input {
-  flex: 1;          /* fill remaining space */
-  min-width: 0;     /* prevents flex overflow bug */
-}
-
-.top-mobile-panel #senderNickname {
-  margin-left: 52px; /* 42px avatar + ~10px gap */
-  width: calc(100% - 52px);
-}
-
-.top-mobile-panel .receiver-sender-container {
-  background: #111827;              /* same as bottom panel */
-  border: 2px solid #1f2937;        /* subtle border like UI */
-  border-radius: 16px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
 #rexxPopup {
   position: fixed;
   top: 50%;
@@ -761,11 +710,10 @@ button {
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   display: none; /* hidden by default */
   text-align: center;
-  max-width: 400px; 
+  max-width: 400px;
   width: 90%;
   animation: pulseBorder 1.5s infinite alternate; /* add pulse animation */
 }
-
 #rexxPopup button {
   margin-top: 15px;
   padding: 8px 16px;
@@ -776,11 +724,9 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
-
 #rexxPopup button:hover {
   background: #2563eb;
 }
-
 /* PULSE ANIMATION */
 @keyframes pulseBorder {
   0% {
@@ -796,27 +742,23 @@ button {
     border-color: #3b82f6;
   }
 }
-
 /* MOBILE VIEW */
 @media (max-width: 768px) {
   #rexxPopup {
-    max-width: 95%;  
-    padding: 18px 20px; 
-    font-size: 16px;  
+    max-width: 95%;
+    padding: 18px 20px;
+    font-size: 16px;
   }
 }
 .rexx-highlight {
   color: #60a5fa; /* light blue */
   font-weight: bold;
 }
-
 /*VIEWPORT FIX*/
-
 html, body {
   height: 100%;
   overflow: hidden;
 }
-
 #iosInstallPopup {
   position: fixed;
   bottom: 100px; /* further down from top, near bottom */
@@ -832,18 +774,16 @@ html, body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   display: none; /* hidden by default */
   text-align: center;
-  max-width: 400px; 
+  max-width: 400px;
   width: 90%;
   animation: pulseBorder 1.5s infinite alternate;
 }
-
 #iosInstallPopup .ios-buttons {
   margin-top: 15px;
   display: flex;
   justify-content: center;
   gap: 12px;
 }
-
 #iosInstallPopup .ios-buttons button {
   padding: 8px 16px;
   border: none;
@@ -852,25 +792,19 @@ html, body {
   cursor: pointer;
   color: white;
 }
-
 #iosInstallPopup #iosYesBtn {
   background: #22c55e; /* green */
 }
-
 #iosInstallPopup #iosYesBtn:hover {
   background: #16a34a;
 }
-
 #iosInstallPopup #iosDismissBtn {
   background: #ef4444; /* red */
 }
-
 #iosInstallPopup #iosDismissBtn:hover {
   background: #b91c1c;
 }
-
 /* ================= SOCIAL ICONS ================= */
-
 /* Desktop (default) */
 .social-icons {
   position: fixed;
@@ -881,18 +815,15 @@ html, body {
   gap: 12px;
   z-index: 2000;
 }
-
 .social-icons img {
   width: 64px;
   height: 64px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
-
 .social-icons img:hover {
   transform: scale(1.1);
 }
-
 /* Mobile ONLY */
 @media (max-width: 768px) {
   .social-icons {
@@ -902,22 +833,18 @@ html, body {
     gap: 16px;
     margin-top: 4px;
   }
-
   .social-icons img {
     width: 32px;
     height: 32px;
   }
 }
-
 /* Show/hide per device */
 .desktop-only { display: flex; }
 .mobile-only { display: none; }
-
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex; }
 }
-
 /* Custom autocomplete dropdown - unlimited options */
 .character-autocomplete {
   position: relative;
@@ -955,13 +882,11 @@ html, body {
 </style>
 </head>
 <body>
-
 <div id="rexxPopup">
   If you enjoy my work, don't forget to use <span class="rexx-highlight">RexxJRM</span> in the Item Shop! It helps a lot :)
   <br>
   <button onclick="document.getElementById('rexxPopup').style.display='none'">Got it!</button>
 </div>
-
 <div id="iosInstallPopup">
   Want to add this to your <span class="rexx-highlight">Home Screen</span> for quicker access and better performance?
   <br>
@@ -972,14 +897,12 @@ html, body {
     <button id="iosDismissBtn">Dismiss</button>
   </div>
 </div>
-
 <!-- MOBILE LAYOUT -->
 <div class="top-mobile-panel collapsed" id="topMobilePanel">
 <div class="top-image-container">
     <img id="topLeftImage" src="https://i.imgur.com/9XfiRSo.png" alt="Logo">
   </div>
   <div class="receiver-sender-container">
-
  <!-- Receiver (Mobile) -->
 <div class="control-group">
   <label>Receiver:</label>
@@ -992,7 +915,6 @@ html, body {
   </div>
   <input type="text" id="senderNickname" placeholder="Receiver Nickname" maxlength="16">
 </div>
-
 <!-- Sender (Mobile) -->
 <div class="control-group">
   <label>Sender:</label>
@@ -1004,7 +926,6 @@ html, body {
     </div>
   </div>
 </div>
-
 </div>
   <div class="control-group">
     <label>Background Color:</label>
@@ -1022,6 +943,18 @@ html, body {
     <label>Sender Bubble Color:</label>
     <input type="color" id="rightColor" value="#5DDA65">
   </div>
+
+  <!-- ==================== NEW FONT DROPDOWN (Mobile - appears UNDER Sender Bubble Color) ==================== -->
+  <div class="control-group font-control">
+    <label>Font:</label>
+    <select id="messageFont">
+      <option value="Varela Round" selected>Varela Round</option>
+      <option value="DynaPuff">DynaPuff</option>
+      <option value="Playpen Sans">Playpen Sans</option>
+      <option value="Quantico">Quantico</option>
+    </select>
+  </div>
+
   <!-- Donate Box (Mobile Only) -->
 <div id="donate-button-container">
 <div id="donate-button"></div>
@@ -1038,10 +971,8 @@ title:'PayPal - The safer, easier way to pay online!',
 }).render('#donate-button');
 </script>
 </div>
-
   <div class="top-collapse-handle" id="topCollapseHandle">▼</div>
 </div>
-
 <!-- DESKTOP LAYOUT -->
 <div class="controls">
 <!-- Desktop Logo -->
@@ -1058,7 +989,6 @@ title:'PayPal - The safer, easier way to pay online!',
   </div>
   <input type="text" id="senderNickname2" placeholder="Nickname" maxlength="16">
 </div>
-
 <!-- Sender (Desktop) -->
 <div class="control-group">
   <label>Sender:</label>
@@ -1086,10 +1016,21 @@ title:'PayPal - The safer, easier way to pay online!',
     <label>Sender Bubble:</label>
     <input type="color" id="rightColor2" value="#5DDA65">
   </div>
+
+  <!-- ==================== NEW FONT DROPDOWN (Desktop - appears NEXT TO Sender Bubble color) ==================== -->
+  <div class="control-group font-control">
+    <label>Font:</label>
+    <select id="messageFont2">
+      <option value="Varela Round" selected>Varela Round</option>
+      <option value="DynaPuff">DynaPuff</option>
+      <option value="Playpen Sans">Playpen Sans</option>
+      <option value="Quantico">Quantico</option>
+    </select>
+  </div>
+
   <div class="control-group">
   <div id="donate-button-desktop"></div>
 </div>
-
 <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
 <script>
 function renderPayPalButton(target) {
@@ -1103,12 +1044,10 @@ function renderPayPalButton(target) {
     }
   }).render(target);
 }
-
 // Render for desktop
 renderPayPalButton('#donate-button-desktop');
 </script>
 </div>
-
 <!-- Phone Preview -->
 <div class="phone-container">
   <div class="phone-wrapper">
@@ -1126,7 +1065,6 @@ renderPayPalButton('#donate-button-desktop');
     </div>
   </div>
 </div>
-
 <!-- Bottom Inputs - Fixed and overlapping chat -->
 <div class="bottom-inputs" id="bottomInputs">
   <div class="collapse-handle" id="collapseHandle">—</div>
@@ -1149,7 +1087,6 @@ renderPayPalButton('#donate-button-desktop');
     <button class="upload-btn" onclick="triggerFile('left')">📁</button>
     <input type="file" id="leftFileInput" style="display:none" accept="image/*">
   </div>
-
   <!-- Sender input with upload -->
   <div class="input-with-btn">
     <input id="rightImage" placeholder="Sender image URL">
@@ -1181,7 +1118,6 @@ renderPayPalButton('#donate-button-desktop');
   </a>
 </div>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 // ==================== CHARACTERS ====================
@@ -1232,76 +1168,59 @@ const characters = {
   "Lace":"https://static.wikia.nocookie.net/fortnite/images/e/e5/Lace_%28v31.30%29_-_Outfit_-_Fortnite.png",
   "Graveheart":"https://static.wikia.nocookie.net/fortnite/images/d/d6/Graveheart_-_Outfit_-_Fortnite.png",
   "Rally Raider":"https://static.wikia.nocookie.net/fortnite/images/4/4e/Rally_Raider_-_Outfit_-_Fortnite.png",
-  
+ 
   // Add unlimited new characters here, example:
   // ,"New Skin Name": "https://static.wikia.nocookie.net/fortnite/images/...png"
 };
-
 // ==================== CUSTOM AUTOCOMPLETE ====================
 let characterNames = Object.keys(characters);
-
 function showSuggestions(input, suggestionsContainer) {
   const value = input.value.toLowerCase().trim();
   suggestionsContainer.innerHTML = '';
-
   if (!value) {
     suggestionsContainer.style.display = 'none';
     return;
   }
-
-  const filtered = characterNames.filter(name => 
+  const filtered = characterNames.filter(name =>
     name.toLowerCase().includes(value)
   );
-
   if (filtered.length === 0) {
     suggestionsContainer.style.display = 'none';
     return;
   }
-
   filtered.forEach(name => {
     const div = document.createElement('div');
     div.textContent = name;
-
     // Desktop fix: Use click + set value + dispatch events
     div.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopImmediatePropagation();
-
       // Force the value change
       input.value = name;
-
       // Hide dropdown
       suggestionsContainer.style.display = 'none';
-
       // Important for desktop: trigger input and change events
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
-
       // Update everything (avatars, header, sync)
       updateAll();
     });
-
     suggestionsContainer.appendChild(div);
   });
-
   suggestionsContainer.style.display = 'block';
 }
-
 function attachAutocomplete(input, suggestionsContainer) {
   input.addEventListener('input', () => showSuggestions(input, suggestionsContainer));
-
   // Shorter blur delay for desktop
   input.addEventListener('blur', () => {
     setTimeout(() => {
       suggestionsContainer.style.display = 'none';
     }, 150);
   });
-
   input.addEventListener('keydown', e => {
     if (e.key === 'Escape') suggestionsContainer.style.display = 'none';
   });
 }
-
 // Attach to all search inputs
 attachAutocomplete(document.getElementById('leftCharacterSearch'), document.getElementById('leftSuggestions'));
 attachAutocomplete(document.getElementById('rightCharacterSearch'), document.getElementById('rightSuggestions'));
@@ -1331,6 +1250,10 @@ const leftColor2 = document.getElementById('leftColor2');
 const rightColor2 = document.getElementById('rightColor2');
 const bgUpload = document.getElementById('bgUpload');
 const bgUpload2 = document.getElementById('bgUpload2');
+
+// ==================== NEW FONT SELECTORS ====================
+const messageFont = document.getElementById('messageFont');
+const messageFont2 = document.getElementById('messageFont2');
 
 function setCustomBackground(file) {
   if (!file) return;
@@ -1370,6 +1293,9 @@ const importBtn = document.getElementById('importBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importFile = document.getElementById('importFile');
 
+// ==================== GLOBAL SELECTED FONT (default = Varela Round) ====================
+let selectedFont = 'Varela Round';
+
 // ==================== NEW TOP PANEL COLLAPSE ====================
 let isTopCollapsed = true;
 topCollapseHandle.addEventListener('click', () => {
@@ -1379,7 +1305,6 @@ topCollapseHandle.addEventListener('click', () => {
     topCollapseHandle.textContent = isTopCollapsed ? '▼' : '—';
   }
 });
-
 // ==================== ORIGINAL BOTTOM COLLAPSE ====================
 let isCollapsed = false;
 collapseHandle.addEventListener('click', () => {
@@ -1390,34 +1315,26 @@ collapseHandle.addEventListener('click', () => {
     setTimeout(updateChatBoxHeight, 310);
   }
 });
-
 // ==================== IMAGE UPLOAD HANDLER ====================
 function handleFileUpload(side) {
   const fileInput = document.getElementById(`${side}FileInput`);
   const urlInput = document.getElementById(`${side}Image`);
-
   fileInput.addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file) return;
-
     // If file is small enough → use directly
     if (file.size < 20 * 1024 * 1024) { // under 5MB
       urlInput.value = URL.createObjectURL(file);
       return;
     }
-
     // ⚠️ Large file → safely resize
     const img = new Image();
     img.src = URL.createObjectURL(file);
-
     img.onload = () => {
       const canvas = document.createElement('canvas');
-
       // Limit max dimension (SAFE for mobile)
       const MAX_SIZE = 4096;
-
       let { width, height } = img;
-
       if (width > height) {
         if (width > MAX_SIZE) {
           height *= MAX_SIZE / width;
@@ -1429,22 +1346,17 @@ function handleFileUpload(side) {
           height = MAX_SIZE;
         }
       }
-
       canvas.width = width;
       canvas.height = height;
-
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-
       urlInput.value = canvas.toDataURL('image/jpeg', 0.85); // compressed
     };
   });
 }
-
 // Initialize for both sides
 handleFileUpload('left');
 handleFileUpload('right');
-
 function updateChatBoxHeight() {
   if (window.innerWidth > 768) return;
   const chatContainer = document.querySelector('.chat-box-container');
@@ -1460,19 +1372,15 @@ collapseHandle.addEventListener('click', () => {
   setTimeout(updateChatBoxHeight, 310);
 });
 window.addEventListener('resize', updateChatBoxHeight);
-
-// ==================== REST OF YOUR ORIGINAL SCRIPT (unchanged) ====================
-
+// ==================== REST OF YOUR ORIGINAL SCRIPT (updated for fonts) ====================
 function updateDropdownAvatars() {
   const defaultAvatar = characters["Jonesy"] || "";
-  
+ 
   // Use the actual current input values
   const leftVal = (leftCharacterSearch.value || "").trim();
   const rightVal = (rightCharacterSearch.value || "").trim();
-
   leftAvatarPreview.src = characters[leftVal] || defaultAvatar;
   rightAvatarPreview.src = characters[rightVal] || defaultAvatar;
-
   // Sync desktop previews
   const leftPrev2 = document.getElementById('leftAvatarPreview2');
   const rightPrev2 = document.getElementById('rightAvatarPreview2');
@@ -1501,6 +1409,7 @@ function syncToDesktop() {
   bgColor2.value = bgColor.value;
   leftColor2.value = leftColor.value;
   rightColor2.value = rightColor.value;
+  messageFont2.value = messageFont.value;   // ← NEW: sync font
 }
 function syncToMobile() {
   leftCharacterSearch.value = leftCharacterSearch2.value;
@@ -1509,6 +1418,7 @@ function syncToMobile() {
   bgColor.value = bgColor2.value;
   leftColor.value = leftColor2.value;
   rightColor.value = rightColor2.value;
+  messageFont.value = messageFont2.value;   // ← NEW: sync font
 }
 function updateAll() {
   updateColors();
@@ -1516,18 +1426,26 @@ function updateAll() {
   updateDropdownAvatars();
   syncToDesktop();
 }
-function createMessage(content, side, avatar, isImage = false, bg = null) {
+// ==================== NEW: APPLY FONT TO ALL MESSAGES ====================
+function applyMessageFont(font) {
+  document.querySelectorAll('.message').forEach(msg => {
+    msg.style.fontFamily = `'${font}', Arial, sans-serif`;
+  });
+}
+// ==================== UPDATED createMessage (now accepts & applies font) ====================
+function createMessage(content, side, avatar, isImage = false, bg = null, fontFamily = selectedFont) {
   const row = document.createElement('div');
   row.className = `message-row ${side}`;
-
   const av = document.createElement('img');
   av.className = 'avatar';
   av.src = avatar;
-
   const msg = document.createElement('div');
   msg.className = 'message';
   msg.dataset.side = side;
   if (bg) msg.style.background = bg;
+  
+  // Apply the selected font (this is the key change)
+  msg.style.fontFamily = `'${fontFamily}', Arial, sans-serif`;
 
   if (isImage) {
     const im = document.createElement('img');
@@ -1546,25 +1464,20 @@ function createMessage(content, side, avatar, isImage = false, bg = null) {
     }
   });
   msg.appendChild(delBtn); // append inside bubble
-
   if (side === 'left') row.append(av, msg);
   else row.append(msg, av);
-
   return row;
 }
-
 async function getPersistentImageSrc(src) {
   // Already a permanent data URL or external URL → keep as-is
   if (!src || src.startsWith('data:') || src.startsWith('http')) {
     return src;
   }
-
   // blob: URL (from file upload) → convert to permanent data URL
   if (src.startsWith('blob:')) {
     try {
       const response = await fetch(src);
       const blob = await response.blob();
-
       // Special handling for GIFs to preserve animation
       if (blob.type === 'image/gif') {
         return new Promise((resolve) => {
@@ -1574,7 +1487,6 @@ async function getPersistentImageSrc(src) {
           reader.readAsDataURL(blob);
         });
       }
-
       // For other images (jpg, png, etc.), use canvas (keeps them smaller)
       return new Promise((resolve) => {
         const img = new Image();
@@ -1594,7 +1506,6 @@ async function getPersistentImageSrc(src) {
       return src;
     }
   }
-
   return src; // fallback
 }
 function addMessage() {
@@ -1603,19 +1514,19 @@ function addMessage() {
   if (leftInput.value) chatBox.append(createMessage(leftInput.value, 'left', characters[l] || characters["Jonesy"], false, leftColor.value));
   if (leftImage.value) chatBox.append(createMessage(leftImage.value, 'left', characters[l] || characters["Jonesy"], true, leftColor.value));
   if (rightInput.value) chatBox.append(createMessage(rightInput.value, 'right', characters[r] || characters["Jonesy"], false, rightColor.value));
-if (rightImage.value) chatBox.append(createMessage(rightImage.value, 'right', characters[r] || characters["Jonesy"], true, rightColor.value));
+  if (rightImage.value) chatBox.append(createMessage(rightImage.value, 'right', characters[r] || characters["Jonesy"], true, rightColor.value));
   leftInput.value = rightInput.value = leftImage.value = rightImage.value = '';
   updateAll();
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 saveBtn.addEventListener('click', async () => {
   const messages = [];
-  
+ 
   for (const row of chatBox.querySelectorAll('.message-row')) {
     const side = row.classList.contains('left') ? 'left' : 'right';
     const msgEl = row.querySelector('.message');
     const isImage = !!msgEl.querySelector('img');
-    
+   
     let content;
     if (isImage) {
       const imgSrc = msgEl.querySelector('img').src;
@@ -1623,17 +1534,19 @@ saveBtn.addEventListener('click', async () => {
     } else {
       content = msgEl.textContent.trim();
     }
-    
+   
     const avatar = row.querySelector('.avatar').src;
-    messages.push({ 
-      side, 
-      content, 
-      avatar, 
-      isImage, 
-      styles: { background: msgEl.style.backgroundColor || '', font: 'Varela Round' } 
+    messages.push({
+      side,
+      content,
+      avatar,
+      isImage,
+      styles: { 
+        background: msgEl.style.backgroundColor || '', 
+        font: selectedFont   // ← CHANGED: now stores the actual selected font
+      }
     });
   }
-
   let customBg = null;
   if (chatBox.dataset.customBg) {
     const url = chatBox.style.backgroundImage;
@@ -1642,7 +1555,6 @@ saveBtn.addEventListener('click', async () => {
       customBg = await getPersistentImageSrc(match[1]); // also handle custom bg if it's blob
     }
   }
-
   const saveData = {
     version: "1.5",
     header: {
@@ -1657,7 +1569,6 @@ saveBtn.addEventListener('click', async () => {
     customBackground: customBg,
     messages: messages
   };
-
   const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -1665,7 +1576,6 @@ saveBtn.addEventListener('click', async () => {
   link.download = `fortnite_chat_${(leftCharacterSearch.value || "Unknown").replace(/\s+/g,'')}_${(rightCharacterSearch.value || "Unknown").replace(/\s+/g,'')}.fnchat`;
   link.click();
   URL.revokeObjectURL(url);
-
   const originalText = saveBtn.textContent;
   setTimeout(() => { saveBtn.textContent = originalText; }, 1500);
 });
@@ -1690,6 +1600,16 @@ importFile.addEventListener('change', e => {
       bgColor.value = data.bgColor || "#394551";
       leftColor.value = data.leftColor || "#58B0D5";
       rightColor.value = data.rightColor || "#5DDA65";
+
+      // ==================== RESTORE SELECTED FONT FROM .fnchat ====================
+      let importedFont = 'Varela Round';
+      if (data.messages && data.messages.length > 0 && data.messages[0].styles && data.messages[0].styles.font) {
+        importedFont = data.messages[0].styles.font;
+      }
+      selectedFont = importedFont;
+      messageFont.value = selectedFont;
+      messageFont2.value = selectedFont;
+
       leftCharacterSearch.value = data.header?.receiverCharacter || "Jonesy";
       rightCharacterSearch.value = data.header?.senderCharacter || "Jonesy";
       senderNickname.value = data.header?.senderNickname || "";
@@ -1697,11 +1617,16 @@ importFile.addEventListener('change', e => {
       updateColors();
       chatBox.innerHTML = '';
       (data.messages || []).forEach(m => {
-        const msg = createMessage(m.content, m.side, m.avatar, m.isImage, m.styles?.background);
-if (m.styles?.font) {
-  msg.querySelector('.message').style.fontFamily = `'${m.styles.font}', Arial, sans-serif`;
-}
-chatBox.append(msg);
+        // Pass the saved font (or fallback) to createMessage → it will be applied immediately
+        const row = createMessage(
+          m.content, 
+          m.side, 
+          m.avatar, 
+          m.isImage, 
+          m.styles?.background, 
+          m.styles?.font || selectedFont
+        );
+        chatBox.append(row);
       });
       chatBox.scrollTop = chatBox.scrollHeight;
       //alert('Chat imported successfully!');
@@ -1758,30 +1683,23 @@ window.addEventListener('resize', () => {
 function addExportLogo() {
   const container = document.querySelector('.chat-box-container');
   if (document.getElementById('exportLogo')) return;
-
   const logo = document.createElement('div');
   logo.id = 'exportLogo';
-
   logo.style.position = 'absolute';
   logo.style.bottom = '10px';
-
   /* ✅ FIXED CENTERING (no transform) */
   logo.style.left = '0';
   logo.style.right = '0';
   logo.style.margin = '0 auto';
-
   logo.style.width = '64px';
   logo.style.height = '64px';
-
   logo.style.backgroundImage = 'url("https://i.imgur.com/Po2KS0U.png")';
   logo.style.backgroundSize = 'contain';
   logo.style.backgroundRepeat = 'no-repeat';
   logo.style.backgroundPosition = 'center';
-
   logo.style.opacity = '0.4';
   logo.style.pointerEvents = 'none';
   logo.style.zIndex = '0';
-
   container.appendChild(logo);
 }
 function removeExportLogo() {
@@ -1817,6 +1735,18 @@ bgColor.addEventListener('input', () => {
   chatBox.style.backgroundImage = '';
   chatBox.style.backgroundColor = bgColor.value;
 });
+// ==================== FONT DROPDOWN LISTENERS (sync + live preview) ====================
+messageFont.addEventListener('change', () => {
+  selectedFont = messageFont.value;
+  messageFont2.value = selectedFont;
+  applyMessageFont(selectedFont);
+});
+messageFont2.addEventListener('change', () => {
+  selectedFont = messageFont2.value;
+  messageFont.value = selectedFont;
+  applyMessageFont(selectedFont);
+});
+
 const emojis = [
   "😀","😂","😍","😎","😢","🔥","💀","❤️","👍","🙏",
   "🎉","😡","🥶","🤯","😴","👀","💯","⚡","🤔","🥳"
@@ -1852,43 +1782,31 @@ document.addEventListener('click', (e) => {
     document.querySelectorAll('.emoji-picker').forEach(p => p.style.display = 'none');
   }
 });
-
 function fixViewport() {
   const phone = document.getElementById('phone');
-
   if (window.visualViewport) {
     const viewportHeight = window.visualViewport.height;
-
     // Lock body height to visible viewport
     document.body.style.height = viewportHeight + 'px';
-
     // Always reset first (prevents "stuck up" bug)
     phone.style.transform = 'translateY(0)';
-
     // Detect if keyboard is open
     const keyboardOpen = viewportHeight < window.innerHeight - 100;
-
     if (keyboardOpen) {
       const offset = (window.innerHeight - viewportHeight) / 2;
       phone.style.transform = `translateY(-${offset}px)`;
     }
   }
 }
-
 /* ===== LISTENERS ===== */
-
 // Fires when keyboard opens/closes (most important)
 window.visualViewport?.addEventListener('resize', fixViewport);
-
 // Fires on some devices when viewport shifts
 window.visualViewport?.addEventListener('scroll', fixViewport);
-
 // Fallback for browsers without visualViewport
 window.addEventListener('resize', fixViewport);
-
 // Run once on load
 fixViewport();
-
 /* ===== FIX "STUCK AFTER KEYBOARD CLOSE" ===== */
 document.addEventListener('focusout', () => {
   setTimeout(() => {
@@ -1897,74 +1815,61 @@ document.addEventListener('focusout', () => {
     fixViewport();
   }, 300);
 });
-
 //UPLOAD IMAGE TO CHAT//
-
 function triggerFile(side) {
   if(side === 'left') document.getElementById('leftFileInput').click();
   else document.getElementById('rightFileInput').click();
 }
-
 function handleImageFileInput(side) {
   const fileInput = document.getElementById(`${side}FileInput`);
   const urlInput = document.getElementById(`${side}Image`);
-  
+ 
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    
+   
     const objectUrl = URL.createObjectURL(file);
     urlInput.value = objectUrl;
-    
-    // Optional: store file info on the input for later save (but we mainly rely on blob url)
-    // We'll handle it in getPersistentImageSrc via the blob URL
   });
 }
-
 // Initialize
 handleImageFileInput('left');
 handleImageFileInput('right');
-
 document.getElementById('rightFileInput').addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
   rightImage.value = URL.createObjectURL(file); // fills URL input
 });
-
 // Initialize
 loadEmojis();
 document.addEventListener('keydown', e => { if(e.key === 'Enter') addMessage(); });
-updateAll();
+updateAll();   // initial render
+// Set initial font on page load (in case any messages are added before interaction)
+applyMessageFont(selectedFont);
 
 function showRexxPopup() {
   const popup = document.getElementById('rexxPopup');
   popup.style.display = 'block';
 }
-
 function closeRexxPopup() {
   const popup = document.getElementById('rexxPopup');
   popup.style.display = 'none';
 }
-
 // Show after 10 seconds
 setTimeout(showRexxPopup, 10000);
-
 // Detect iOS
 function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
 }
-
 // Detect if in standalone mode
 function isInStandaloneMode() {
   return ('standalone' in window.navigator) && window.navigator.standalone;
 }
-
 window.addEventListener('load', () => {
   if (isIos() && !isInStandaloneMode()) {
     setTimeout(() => {
       const iosPopup = document.getElementById('iosInstallPopup');
       iosPopup.style.display = 'block';
-
       // Yes button
       document.getElementById('iosYesBtn').addEventListener('click', () => {
         iosPopup.innerHTML = `
@@ -1980,7 +1885,6 @@ window.addEventListener('load', () => {
           iosPopup.style.display = 'none';
         });
       });
-
       // Dismiss button closes popup
       document.getElementById('iosDismissBtn').addEventListener('click', () => {
         iosPopup.style.display = 'none';
@@ -1988,27 +1892,23 @@ window.addEventListener('load', () => {
     }, 2000);
   }
 });
-
 // INSPECT ELEMENT PREVENTION (PASTE AT BOTTOM OF HTML SCRIPT)
-
 document.addEventListener('contextmenu', e => {
     e.preventDefault();
-    
+   
 });
-
 document.addEventListener('keydown', function(e) {
     // F12
     if(e.key === 'F12') {
         e.preventDefault();
-        
+       
     }
     // Ctrl+Shift+I / J / C
     if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) {
         e.preventDefault();
-        
+       
     }
 });
-
 let devtoolsOpen = false;
 setInterval(() => {
     const threshold = 160;
