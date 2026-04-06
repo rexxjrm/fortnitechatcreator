@@ -1247,50 +1247,18 @@ function handleFileUpload(side) {
     const file = e.target.files[0];
     if (!file) return;
 
-    // If file is small enough → use directly
-    if (file.size < 20 * 1024 * 1024) { // under 5MB
-      urlInput.value = URL.createObjectURL(file);
-      return;
-    }
-
-    // ⚠️ Large file → safely resize
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
-
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-
-      // Limit max dimension (SAFE for mobile)
-      const MAX_SIZE = 4096;
-
-      let { width, height } = img;
-
-      if (width > height) {
-        if (width > MAX_SIZE) {
-          height *= MAX_SIZE / width;
-          width = MAX_SIZE;
-        }
-      } else {
-        if (height > MAX_SIZE) {
-          width *= MAX_SIZE / height;
-          height = MAX_SIZE;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      urlInput.value = canvas.toDataURL('image/jpeg', 0.85); // compressed
+    const reader = new FileReader();
+    reader.onload = () => {
+      urlInput.value = reader.result; // ✅ ALWAYS Base64
     };
+    reader.readAsDataURL(file);
   });
 }
 
-// Initialize for both sides
-handleFileUpload('left');
-handleFileUpload('right');
+document.addEventListener('DOMContentLoaded', () => {
+  handleFileUpload('left');
+  handleFileUpload('right');
+});
 
 function updateChatBoxHeight() {
   if (window.innerWidth > 768) return;
