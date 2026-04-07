@@ -45,6 +45,11 @@ body {
   position:relative;
   overflow:hidden;
 }
+html, body {
+  height: 100dvh;           /* dynamic viewport height - better for keyboards */
+  min-height: 100dvh;
+  overflow: hidden;
+}
 #topLeftImage {
   position:fixed;
   top: 12px;
@@ -1890,37 +1895,41 @@ document.addEventListener('click', (e) => {
 });
 function fixViewport() {
   const phone = document.getElementById('phone');
+  if (!phone) return;
+
+  // Always reset first
+  phone.style.transform = 'translateY(0)';
+
   if (window.visualViewport) {
-    const viewportHeight = window.visualViewport.height;
-    // Lock body height to visible viewport
-    document.body.style.height = viewportHeight + 'px';
-    // Always reset first (prevents "stuck up" bug)
-    phone.style.transform = 'translateY(0)';
-    // Detect if keyboard is open
-    const keyboardOpen = viewportHeight < window.innerHeight - 100;
-    if (keyboardOpen) {
-      const offset = (window.innerHeight - viewportHeight) / 2;
+    const vh = window.visualViewport.height;
+    const windowHeight = window.innerHeight;
+
+    // If keyboard is likely open (visual viewport much smaller)
+    if (vh < windowHeight * 0.75) {
+      const offset = (windowHeight - vh) / 2;   // center the phone better
       phone.style.transform = `translateY(-${offset}px)`;
     }
   }
 }
-/* ===== LISTENERS ===== */
-// Fires when keyboard opens/closes (most important)
-window.visualViewport?.addEventListener('resize', fixViewport);
-// Fires on some devices when viewport shifts
-window.visualViewport?.addEventListener('scroll', fixViewport);
-// Fallback for browsers without visualViewport
+
+// Listeners
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', fixViewport);
+  window.visualViewport.addEventListener('scroll', fixViewport);
+}
 window.addEventListener('resize', fixViewport);
-// Run once on load
-fixViewport();
-/* ===== FIX "STUCK AFTER KEYBOARD CLOSE" ===== */
+
+// Also run on focusout (when keyboard closes) with a small delay
 document.addEventListener('focusout', () => {
   setTimeout(() => {
     const phone = document.getElementById('phone');
-    phone.style.transform = 'translateY(0)';
+    if (phone) phone.style.transform = 'translateY(0)';
     fixViewport();
-  }, 300);
+  }, 250);
 });
+
+// Run once on load
+setTimeout(fixViewport, 100);
 //UPLOAD IMAGE TO CHAT//
 function triggerFile(side) {
   if(side === 'left') document.getElementById('leftFileInput').click();
