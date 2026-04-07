@@ -62,15 +62,15 @@ body {
   left: 12px;
   right: 12px;
   background: #111827;
-  z-index: 5000; /* Highest z-index - on top of everything */
+  z-index: 5000;
   border-radius: 0 0 20px 20px;
   border-bottom: 2px solid #1f2937;
-  display: none;
+  display: flex;
   flex-direction: column;
   padding: 12px 15px 12px;
-  max-height: none;
-  overflow-y: hidden;
-  transition: transform 0.3s ease; /* Same transition as bottom panel */
+  max-height: 100vh;           /* ← NEW: prevents handle from going off-screen */
+  overflow-y: hidden;          /* panel itself never scrolls */
+  transition: transform 0.3s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 .top-mobile-panel.collapsed {
@@ -82,7 +82,7 @@ body {
   background: #374151;
   border-radius: 10px;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 14px;
   transition: background 0.2s;
   display: flex;
   align-items: center;
@@ -93,6 +93,28 @@ body {
 }
 .top-collapse-handle:hover {
   background: #4b5563;
+}
+/* ==================== SCROLLABLE CONTENT (keeps handle always visible) ==================== */
+.top-mobile-content {
+  flex: 1;                    /* takes all available space */
+  min-height: 0;              /* critical for flex + overflow on mobile */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.top-mobile-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.top-mobile-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.top-mobile-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 /* Original burger and mobile menu */
 .top-mobile-panel .control-group {
@@ -412,6 +434,13 @@ body {
 .bottom-inputs.collapsed {
   transform: translateY(calc(100% - 42px));
   transition: transform 0.3s ease;
+}
+
+/* Desktop: force always expanded (ignore collapsed class) */
+@media (min-width: 769px) {
+  .bottom-inputs.collapsed {
+    transform: none !important;
+  }
 }
 .bottom-inputs {
   transition: transform 0.3s ease;
@@ -907,6 +936,7 @@ html, body {
 </div>
 <!-- MOBILE LAYOUT -->
 <div class="top-mobile-panel collapsed" id="topMobilePanel">
+<div class="top-mobile-content">
 <div class="top-image-container">
     <img id="topLeftImage" src="https://i.imgur.com/9XfiRSo.png" alt="Logo">
   </div>
@@ -978,6 +1008,7 @@ title:'PayPal - The safer, easier way to pay online!',
 }
 }).render('#donate-button');
 </script>
+</div>
 </div>
   <div class="top-collapse-handle" id="topCollapseHandle">▼</div>
 </div>
@@ -1074,7 +1105,7 @@ renderPayPalButton('#donate-button-desktop');
   </div>
 </div>
 <!-- Bottom Inputs - Fixed and overlapping chat -->
-<div class="bottom-inputs" id="bottomInputs">
+<div class="bottom-inputs collapsed" id="bottomInputs">
   <div class="collapse-handle" id="collapseHandle">—</div>
   <div class="inputs">
   <div style="position:relative; flex:1;">
@@ -1131,7 +1162,10 @@ renderPayPalButton('#donate-button-desktop');
 // ==================== CHARACTERS ====================
 // ==================== CHARACTERS (unlimited now) ====================
 const characters = {
-  "Jonesy":"https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png",
+  "Jonesy":"https://static.wikia.nocookie.net/fortnite/images/c/c3/Survivalist_Jonesy_Rare.png",
+  "Jonesy The First":"https://static.wikia.nocookie.net/fortnite/images/0/0a/Jonesy_The_First_-_Outfit_-_Fortnite.png",
+  "Recruit Jonesy":"https://static.wikia.nocookie.net/fortnite/images/5/50/Recruit_Jonesy_%28v32.00%29_-_Outfit_-_Fortnite.png",
+  "Agent Jones":"https://static.wikia.nocookie.net/fortnite/images/5/58/Agent_Jones_-_Outfit_-_Fortnite.png",
   "Hush":"https://static.wikia.nocookie.net/fortnite/images/d/d8/Hush_%28v32.00%29_-_Outfit_-_Fortnite.png",
   "Cuddle Team Leader":"https://static.wikia.nocookie.net/fortnite/images/8/87/Cuddle_Team_Leader_%28v33.30%29_-_Outfit_-_Fortnite.png",
   "Fishstick":"https://static.wikia.nocookie.net/fortnite/images/5/58/Fishstick_%28v31.30%29_-_Outfit_-_Fortnite.png",
@@ -1140,6 +1174,9 @@ const characters = {
   "Lady Windfrost":"https://static.wikia.nocookie.net/fortnite/images/6/6c/Lady_Windfrost_-_Outfit_-_Fortnite.png",
   "Dasha":"https://static.wikia.nocookie.net/fortnite/images/d/dd/Dasha_-_Outfit_-_Fortnite.png",
   "Hope":"https://static.wikia.nocookie.net/fortnite/images/2/29/Hope_-_Outfit_-_Fortnite.png",
+  "Heroic Hope":"https://static.wikia.nocookie.net/fortnite/images/7/77/Heroic_Hope_-_Outfit_-_Fortnite.png",
+  "Shadow Blade Hope":"https://static.wikia.nocookie.net/fortnite/images/8/8d/Shadow_Blade_Hope_-_Outfit_-_Fortnite.png",
+  "Rival Hope":"https://static.wikia.nocookie.net/fortnite/images/d/d0/Rival_Hope_-_Outfit_-_Fortnite.png",
   "Valeria":"https://static.wikia.nocookie.net/fortnite/images/0/07/Valeria_-_Outfit_-_Fortnite.png",
   "Airie":"https://static.wikia.nocookie.net/fortnite/images/b/bd/Airie_-_Outfit_-_Fortnite.png",
   "Phaedra":"https://static.wikia.nocookie.net/fortnite/images/0/02/Phaedra_-_Outfit_-_Fortnite.png",
@@ -1195,6 +1232,12 @@ const characters = {
   "The Reaper":"https://static.wikia.nocookie.net/fortnite/images/f/fe/The_Reaper_%28v33.20%29_-_Outfit_-_Fortnite.png",
   "Sparkle Specialist":"https://static.wikia.nocookie.net/fortnite/images/c/c0/Sparkle_Specialist_%28v34.00%29_-_Outfit_-_Fortnite.png",
   "Onesie":"https://static.wikia.nocookie.net/fortnite/images/5/55/Onesie_%28v31.30%29_-_Outfit_-_Fortnite.png",
+  "The Foundation":"https://static.wikia.nocookie.net/fortnite/images/6/69/The_Foundation_-_Outfit_-_Fortnite.png",
+  "The Foundation (Reforged)":"https://static.wikia.nocookie.net/fortnite/images/0/07/The_Foundation_%28Reforged%29_-_Outfit_-_Fortnite.png",
+  "Dark Voyager":"https://static.wikia.nocookie.net/fortnite/images/4/47/Dark_Voyager_%28v33.20%29_-_Outfit_-_Fortnite.png",
+  "Dark Voyager (Reality Redacted)":"https://static.wikia.nocookie.net/fortnite/images/e/ef/Dark_Voyager_%28Reality_Redacted%29_-_Outfit_-_Fortnite.png",
+  "The Ice King":"https://static.wikia.nocookie.net/fortnite/images/0/0c/The_Ice_King_%28v31.30%29_-_Outfit_-_Fortnite.png",
+  "Exalted Ice King":"https://static.wikia.nocookie.net/fortnite/images/c/cd/Exalted_Ice_King_-_Outfit_-_Fortnite.png",
  
   // Add unlimited new characters here, example:
   // ,"New Skin Name": "https://static.wikia.nocookie.net/fortnite/images/...png"
@@ -1334,10 +1377,20 @@ topCollapseHandle.addEventListener('click', () => {
 });
 // ==================== ORIGINAL BOTTOM COLLAPSE ====================
 let isCollapsed = false;
+
+// Initial state: collapsed on mobile, always expanded on desktop
+function initBottomPanelState() {
+  const isMobile = window.innerWidth <= 768;
+  isCollapsed = isMobile;                    // start collapsed on mobile
+  bottomInputs.classList.toggle('collapsed', isCollapsed);
+  collapseHandle.textContent = isCollapsed ? '▲' : '—';
+}
+
+// Click handler (only works on mobile)
 collapseHandle.addEventListener('click', () => {
   if (window.innerWidth <= 768) {
     isCollapsed = !isCollapsed;
-    bottomInputs.classList.toggle('collapsed');
+    bottomInputs.classList.toggle('collapsed', isCollapsed);
     collapseHandle.textContent = isCollapsed ? '▲' : '—';
     setTimeout(updateChatBoxHeight, 310);
   }
@@ -1896,7 +1949,11 @@ document.getElementById('rightFileInput').addEventListener('change', (e) => {
 // Initialize
 loadEmojis();
 document.addEventListener('keydown', e => { if(e.key === 'Enter') addMessage(); });
-updateAll();   // initial render
+updateAll(); // initial render
+
+// Initialize bottom panel state AFTER everything is loaded
+initBottomPanelState();
+updateChatBoxHeight();
 // Set initial font on page load (in case any messages are added before interaction)
 applyMessageFont(selectedFont);
 
