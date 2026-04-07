@@ -1890,62 +1890,36 @@ document.addEventListener('click', (e) => {
 });
 function fixViewport() {
   const phone = document.getElementById('phone');
-  if (!phone || !window.visualViewport) return;
-
-  const vv = window.visualViewport;
-  const viewportHeight = vv.height;
-
-  // Always force body to current visible height (prevents layout shift)
-  document.body.style.height = `${viewportHeight}px`;
-
-  // Reset phone first
-  phone.style.transform = 'translateY(0)';
-
-  // Keyboard is considered open if visual viewport is noticeably smaller
-  const keyboardOpen = viewportHeight < window.innerHeight - 80;
-
-  if (keyboardOpen) {
-    // Center the phone so the chat stays visible while typing
-    const offset = (window.innerHeight - viewportHeight) / 2;
-    phone.style.transform = `translateY(-${offset}px)`;
-  } else {
-    // Keyboard closed → force full reset + scroll to top (fixes offsetTop bug)
+  if (window.visualViewport) {
+    const viewportHeight = window.visualViewport.height;
+    // Lock body height to visible viewport
+    document.body.style.height = viewportHeight + 'px';
+    // Always reset first (prevents "stuck up" bug)
     phone.style.transform = 'translateY(0)';
-    // This line is critical for iOS Safari – forces visualViewport to recalculate
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Detect if keyboard is open
+    const keyboardOpen = viewportHeight < window.innerHeight - 100;
+    if (keyboardOpen) {
+      const offset = (window.innerHeight - viewportHeight) / 2;
+      phone.style.transform = `translateY(-${offset}px)`;
+    }
   }
-
-  // Force layout recalculation
-  requestAnimationFrame(() => {
-    updateChatBoxHeight();
-  });
 }
-
 /* ===== LISTENERS ===== */
-// Main keyboard open/close handler
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', fixViewport);
-  window.visualViewport.addEventListener('scroll', fixViewport);
-} else {
-  // Fallback for very old browsers
-  window.addEventListener('resize', fixViewport);
-}
-
+// Fires when keyboard opens/closes (most important)
+window.visualViewport?.addEventListener('resize', fixViewport);
+// Fires on some devices when viewport shifts
+window.visualViewport?.addEventListener('scroll', fixViewport);
+// Fallback for browsers without visualViewport
+window.addEventListener('resize', fixViewport);
 // Run once on load
 fixViewport();
-
-/* ===== STRONGER KEYBOARD CLOSE FIX ===== */
+/* ===== FIX "STUCK AFTER KEYBOARD CLOSE" ===== */
 document.addEventListener('focusout', () => {
-  // Multiple attempts with increasing delays to handle iOS timing quirks
-  setTimeout(() => fixViewport(), 50);
-  setTimeout(() => fixViewport(), 150);
-  setTimeout(() => fixViewport(), 300);
   setTimeout(() => {
     const phone = document.getElementById('phone');
-    if (phone) phone.style.transform = 'translateY(0)';
-    window.scrollTo(0, 0);
-    updateChatBoxHeight();
-  }, 450);
+    phone.style.transform = 'translateY(0)';
+    fixViewport();
+  }, 300);
 });
 //UPLOAD IMAGE TO CHAT//
 function triggerFile(side) {
