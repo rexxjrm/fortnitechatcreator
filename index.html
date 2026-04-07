@@ -1409,7 +1409,10 @@ function updateColors() {
     chatBox.style.backgroundImage = '';
   }
   document.querySelectorAll('.message').forEach(m => {
-    m.style.background = m.dataset.side === 'left' ? leftColor.value : rightColor.value;
+    const side = m.dataset.side;
+    const bubbleColor = side === 'left' ? leftColor.value : rightColor.value;
+    m.style.background = bubbleColor;
+    m.style.color = getContrastColor(bubbleColor);   // ← new line
   });
 }
 function updateHeader() {
@@ -1448,6 +1451,25 @@ function applyMessageFont(font) {
     msg.style.fontFamily = `'${font}', Arial, sans-serif`;
   });
 }
+
+// ==================== NEW: HELPER TO DECIDE TEXT COLOR (white or black) ====================
+function getContrastColor(hexColor) {
+  // Remove # if present and expand shorthand (#ABC → #AABBCC)
+  let hex = hexColor.replace('#', '');
+  if (hex.length === 3) {
+    hex = hex.split('').map(c => c + c).join('');
+  }
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Standard luminance formula (perceived brightness)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  // > 0.5 = light background → black text; otherwise white text
+  return luminance > 0.5 ? '#000000' : '#ffffff';
+}
+
 // ==================== UPDATED createMessage (now accepts & applies font) ====================
 function createMessage(content, side, avatar, isImage = false, bg = null, fontFamily = selectedFont) {
   const row = document.createElement('div');
@@ -1458,7 +1480,11 @@ function createMessage(content, side, avatar, isImage = false, bg = null, fontFa
   const msg = document.createElement('div');
   msg.className = 'message';
   msg.dataset.side = side;
-  if (bg) msg.style.background = bg;
+  // === UPDATED: set background + automatic text color ===
+  if (bg) {
+    msg.style.background = bg;
+    msg.style.color = getContrastColor(bg);   // ← new line
+  }
   
   // Apply the selected font (this is the key change)
   msg.style.fontFamily = `'${fontFamily}', Arial, sans-serif`;
@@ -1872,7 +1898,7 @@ function closeRexxPopup() {
   popup.style.display = 'none';
 }
 // Show after 10 seconds
-setTimeout(showRexxPopup, 10000);
+setTimeout(showRexxPopup, 15000);
 // Detect iOS
 function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
