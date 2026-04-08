@@ -17,7 +17,6 @@
 <link rel="icon" type="image/png" sizes="16x16" href="https://i.imgur.com/HBc0ieG.png">
 <!-- Apple Touch Icon (iOS home screen) -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://i.imgur.com/zfDEQ4L.png">
-
 <!-- ==================== FONT LINKS ==================== -->
 <!-- Default (already used) -->
 <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
@@ -25,7 +24,6 @@
 <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Vend+Sans:wght@397&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
 <style>
 @font-face {
   font-family: 'Burbank';
@@ -46,7 +44,7 @@ body {
   overflow:hidden;
 }
 html, body {
-  height: 100dvh;           /* dynamic viewport height - better for keyboards */
+  height: 100dvh; /* dynamic viewport height - better for keyboards */
   min-height: 100dvh;
   overflow: hidden;
 }
@@ -73,8 +71,8 @@ html, body {
   display: flex;
   flex-direction: column;
   padding: 12px 15px 12px;
-  max-height: 100vh;           /* ← NEW: prevents handle from going off-screen */
-  overflow-y: hidden;          /* panel itself never scrolls */
+  max-height: 100vh; /* ← NEW: prevents handle from going off-screen */
+  overflow-y: hidden; /* panel itself never scrolls */
   transition: transform 0.3s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
@@ -101,23 +99,20 @@ html, body {
 }
 /* ==================== SCROLLABLE CONTENT (keeps handle always visible) ==================== */
 .top-mobile-content {
-  flex: 1;                    /* takes all available space */
-  min-height: 0;              /* critical for flex + overflow on mobile */
+  flex: 1; /* takes all available space */
+  min-height: 0; /* critical for flex + overflow on mobile */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
-
 .top-mobile-content::-webkit-scrollbar {
   width: 6px;
 }
-
 .top-mobile-content::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 3px;
 }
-
 .top-mobile-content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.6);
 }
@@ -305,7 +300,7 @@ html, body {
 .chat-box {
   flex: 1;
   background: rgb(57,69,81);
-  background-size: cover;        /* This creates the zoom + crop effect */
+  background-size: cover; /* This creates the zoom + crop effect */
   background-position: center center;
   background-repeat: no-repeat;
   padding: 15px;
@@ -317,13 +312,12 @@ html, body {
   scrollbar-width: thin;
   position: relative;
 }
-
 /* Critical mobile fix for dynamic height (when bottom panel expands/collapses) */
 @media (max-width: 768px) {
   .chat-box {
-    background-attachment: scroll;   /* Prevents shrinking on height change */
-    background-size: cover;          /* Reinforces the zoom/crop */
-    min-height: 0;                   /* Helps flex items shrink properly */
+    background-attachment: scroll; /* Prevents shrinking on height change */
+    background-size: cover; /* Reinforces the zoom/crop */
+    min-height: 0; /* Helps flex items shrink properly */
   }
 }
 .chat-box::-webkit-scrollbar {
@@ -410,13 +404,28 @@ html, body {
   border-top: 2px solid #1f2937;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   z-index: 1500;
-  position: absolute;
-  bottom: 12px;
+  position: fixed; /* changed from absolute for consistency */
+  bottom: 0px;
   left: 12px;
   right: 12px;
   border-radius: 20px 20px 0 0;
+  max-height: 100vh; /* ← NEW: prevents handle from going off-screen */
+  overflow-y: hidden; /* panel itself never scrolls */
+  transition: transform 0.3s ease;
+}
+.bottom-inputs.collapsed {
+  transform: translateY(calc(100% - 42px));
+  transition: transform 0.3s ease;
+}
+/* Desktop: force always expanded (ignore collapsed class) */
+@media (min-width: 769px) {
+  .bottom-inputs.collapsed {
+    transform: none !important;
+  }
+}
+.bottom-inputs {
+  transition: transform 0.3s ease;
 }
 .collapse-handle {
   width: 100%;
@@ -436,19 +445,28 @@ html, body {
 .collapse-handle:hover {
   background: #4b5563;
 }
-.bottom-inputs.collapsed {
-  transform: translateY(calc(100% - 42px));
-  transition: transform 0.3s ease;
+/* ==================== SCROLLABLE CONTENT FOR BOTTOM PANEL (keeps handle always visible) ==================== */
+.bottom-mobile-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;   /* This adds extra space right below the handle */
 }
-
-/* Desktop: force always expanded (ignore collapsed class) */
-@media (min-width: 769px) {
-  .bottom-inputs.collapsed {
-    transform: none !important;
-  }
+.bottom-mobile-content::-webkit-scrollbar {
+  width: 6px;
 }
-.bottom-inputs {
-  transition: transform 0.3s ease;
+.bottom-mobile-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+.bottom-mobile-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 .inputs {
   display:flex;
@@ -631,7 +649,6 @@ border-radius: 20px 20px 0 0; /* keeps top corners rounded */
   gap: 8px;
   flex-wrap: nowrap; /* IMPORTANT */
 }
-
 /* ==================== MESSAGE FONT CONTROL GROUP ==================== */
 /* Desktop: horizontal (label next to dropdown) so it sits nicely next to Sender Bubble color */
 .control-group.font-control {
@@ -650,7 +667,6 @@ border-radius: 20px 20px 0 0; /* keeps top corners rounded */
     flex-grow: 1; /* dropdown fills remaining width */
   }
 }
-
 /* Message Font control group - select styling */
 .control-group.font-control select {
   padding: 0.4rem 0.5rem;
@@ -659,7 +675,6 @@ border-radius: 20px 20px 0 0; /* keeps top corners rounded */
   border-radius: 4px;
   font-family: 'Burbank'; /* default font */
 }
-
 /* Mobile-only: hide emoji buttons */
 @media (max-width: 768px) {
   .emoji-btn {
@@ -858,14 +873,12 @@ html, body {
 .social-icons img:hover {
   transform: scale(1.1);
 }
-
 /* Brightness increase on hover — DESKTOP ONLY */
 @media (min-width: 769px) {
   .social-icons img:hover {
     filter: brightness(1.5);
   }
 }
-
 /* Mobile ONLY */
 @media (max-width: 768px) {
   .social-icons {
@@ -986,7 +999,6 @@ html, body {
     <label>Sender Bubble Color:</label>
     <input type="color" id="rightColor" value="#5DDA65">
   </div>
-
   <!-- ==================== NEW FONT DROPDOWN (Mobile - appears UNDER Sender Bubble Color) ==================== -->
   <div class="control-group font-control">
     <label>Font:</label>
@@ -997,7 +1009,6 @@ html, body {
       <option value="Quantico">Quantico</option>
     </select>
   </div>
-
   <!-- Donate Box (Mobile Only) -->
 <div id="donate-button-container">
 <div id="donate-button"></div>
@@ -1060,7 +1071,6 @@ title:'PayPal - The safer, easier way to pay online!',
     <label>Sender Bubble:</label>
     <input type="color" id="rightColor2" value="#5DDA65">
   </div>
-
   <!-- ==================== NEW FONT DROPDOWN (Desktop - appears NEXT TO Sender Bubble color) ==================== -->
   <div class="control-group font-control">
     <label>Font:</label>
@@ -1071,7 +1081,6 @@ title:'PayPal - The safer, easier way to pay online!',
       <option value="Quantico">Quantico</option>
     </select>
   </div>
-
   <div class="control-group">
   <div id="donate-button-desktop"></div>
 </div>
@@ -1112,6 +1121,7 @@ renderPayPalButton('#donate-button-desktop');
 <!-- Bottom Inputs - Fixed and overlapping chat -->
 <div class="bottom-inputs collapsed" id="bottomInputs">
   <div class="collapse-handle" id="collapseHandle">—</div>
+  <div class="bottom-mobile-content">
   <div class="inputs">
   <div style="position:relative; flex:1;">
     <input id="leftInput" placeholder="Receiver message">
@@ -1160,6 +1170,7 @@ renderPayPalButton('#donate-button-desktop');
   <a href="https://www.tiktok.com/@rexxjrm" target="_blank">
     <img src="https://i.imgur.com/Bab2HWn.png">
   </a>
+</div>
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1243,7 +1254,6 @@ const characters = {
   "Dark Voyager (Reality Redacted)":"https://static.wikia.nocookie.net/fortnite/images/e/ef/Dark_Voyager_%28Reality_Redacted%29_-_Outfit_-_Fortnite.png",
   "The Ice King":"https://static.wikia.nocookie.net/fortnite/images/0/0c/The_Ice_King_%28v31.30%29_-_Outfit_-_Fortnite.png",
   "Exalted Ice King":"https://static.wikia.nocookie.net/fortnite/images/c/cd/Exalted_Ice_King_-_Outfit_-_Fortnite.png",
- 
   // Add unlimited new characters here, example:
   // ,"New Skin Name": "https://static.wikia.nocookie.net/fortnite/images/...png"
 };
@@ -1325,11 +1335,9 @@ const leftColor2 = document.getElementById('leftColor2');
 const rightColor2 = document.getElementById('rightColor2');
 const bgUpload = document.getElementById('bgUpload');
 const bgUpload2 = document.getElementById('bgUpload2');
-
 // ==================== NEW FONT SELECTORS ====================
 const messageFont = document.getElementById('messageFont');
 const messageFont2 = document.getElementById('messageFont2');
-
 function setCustomBackground(file) {
   if (!file) return;
   const reader = new FileReader();
@@ -1367,10 +1375,8 @@ const saveBtn = document.getElementById('saveBtn');
 const importBtn = document.getElementById('importBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importFile = document.getElementById('importFile');
-
 // ==================== GLOBAL SELECTED FONT (default = Varela Round) ====================
 let selectedFont = 'Varela Round';
-
 // ==================== NEW TOP PANEL COLLAPSE ====================
 let isTopCollapsed = true;
 topCollapseHandle.addEventListener('click', () => {
@@ -1382,15 +1388,13 @@ topCollapseHandle.addEventListener('click', () => {
 });
 // ==================== ORIGINAL BOTTOM COLLAPSE ====================
 let isCollapsed = false;
-
 // Initial state: collapsed on mobile, always expanded on desktop
 function initBottomPanelState() {
   const isMobile = window.innerWidth <= 768;
-  isCollapsed = isMobile;                    // start collapsed on mobile
+  isCollapsed = isMobile; // start collapsed on mobile
   bottomInputs.classList.toggle('collapsed', isCollapsed);
   collapseHandle.textContent = isCollapsed ? '▲' : '—';
 }
-
 // Click handler (only works on mobile)
 collapseHandle.addEventListener('click', () => {
   if (window.innerWidth <= 768) {
@@ -1460,7 +1464,6 @@ window.addEventListener('resize', updateChatBoxHeight);
 // ==================== REST OF YOUR ORIGINAL SCRIPT (updated for fonts) ====================
 function updateDropdownAvatars() {
   const defaultAvatar = characters["Jonesy"] || "";
- 
   // Use the actual current input values
   const leftVal = (leftCharacterSearch.value || "").trim();
   const rightVal = (rightCharacterSearch.value || "").trim();
@@ -1481,7 +1484,7 @@ function updateColors() {
     const side = m.dataset.side;
     const bubbleColor = side === 'left' ? leftColor.value : rightColor.value;
     m.style.background = bubbleColor;
-    m.style.color = getContrastColor(bubbleColor);   // ← new line
+    m.style.color = getContrastColor(bubbleColor); // ← new line
   });
 }
 function updateHeader() {
@@ -1497,7 +1500,7 @@ function syncToDesktop() {
   bgColor2.value = bgColor.value;
   leftColor2.value = leftColor.value;
   rightColor2.value = rightColor.value;
-  messageFont2.value = messageFont.value;   // ← NEW: sync font
+  messageFont2.value = messageFont.value; // ← NEW: sync font
 }
 function syncToMobile() {
   leftCharacterSearch.value = leftCharacterSearch2.value;
@@ -1506,7 +1509,7 @@ function syncToMobile() {
   bgColor.value = bgColor2.value;
   leftColor.value = leftColor2.value;
   rightColor.value = rightColor2.value;
-  messageFont.value = messageFont2.value;   // ← NEW: sync font
+  messageFont.value = messageFont2.value; // ← NEW: sync font
 }
 function updateAll() {
   updateColors();
@@ -1520,7 +1523,6 @@ function applyMessageFont(font) {
     msg.style.fontFamily = `'${font}', Arial, sans-serif`;
   });
 }
-
 // ==================== NEW: HELPER TO DECIDE TEXT COLOR (white or black) ====================
 function getContrastColor(hexColor) {
   // Remove # if present and expand shorthand (#ABC → #AABBCC)
@@ -1531,14 +1533,11 @@ function getContrastColor(hexColor) {
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-
   // Standard luminance formula (perceived brightness)
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
   // > 0.5 = light background → black text; otherwise white text
   return luminance > 0.5 ? '#000000' : '#ffffff';
 }
-
 // ==================== UPDATED createMessage (now accepts & applies font) ====================
 function createMessage(content, side, avatar, isImage = false, bg = null, fontFamily = selectedFont) {
   const row = document.createElement('div');
@@ -1552,18 +1551,16 @@ function createMessage(content, side, avatar, isImage = false, bg = null, fontFa
   // === UPDATED: set background + automatic text color ===
   if (bg) {
     msg.style.background = bg;
-    msg.style.color = getContrastColor(bg);   // ← new line
+    msg.style.color = getContrastColor(bg); // ← new line
   }
-  
+ 
   // Apply the selected font (this is the key change)
   msg.style.fontFamily = `'${fontFamily}', Arial, sans-serif`;
-
   if (isImage) {
     const im = document.createElement('img');
     im.src = content;
     msg.appendChild(im);
   } else msg.textContent = content;
-
   // === Add delete button inside the message bubble ===
   const delBtn = document.createElement('div');
   delBtn.className = 'delete-btn';
@@ -1632,12 +1629,11 @@ function addMessage() {
 }
 saveBtn.addEventListener('click', async () => {
   const messages = [];
- 
   for (const row of chatBox.querySelectorAll('.message-row')) {
     const side = row.classList.contains('left') ? 'left' : 'right';
     const msgEl = row.querySelector('.message');
     const isImage = !!msgEl.querySelector('img');
-   
+  
     let content;
     if (isImage) {
       const imgSrc = msgEl.querySelector('img').src;
@@ -1645,16 +1641,16 @@ saveBtn.addEventListener('click', async () => {
     } else {
       content = msgEl.textContent.trim();
     }
-   
+  
     const avatar = row.querySelector('.avatar').src;
     messages.push({
       side,
       content,
       avatar,
       isImage,
-      styles: { 
-        background: msgEl.style.backgroundColor || '', 
-        font: selectedFont   // ← CHANGED: now stores the actual selected font
+      styles: {
+        background: msgEl.style.backgroundColor || '',
+        font: selectedFont // ← CHANGED: now stores the actual selected font
       }
     });
   }
@@ -1711,7 +1707,6 @@ importFile.addEventListener('change', e => {
       bgColor.value = data.bgColor || "#394551";
       leftColor.value = data.leftColor || "#58B0D5";
       rightColor.value = data.rightColor || "#5DDA65";
-
       // ==================== RESTORE SELECTED FONT FROM .fnchat ====================
       let importedFont = 'Varela Round';
       if (data.messages && data.messages.length > 0 && data.messages[0].styles && data.messages[0].styles.font) {
@@ -1720,7 +1715,6 @@ importFile.addEventListener('change', e => {
       selectedFont = importedFont;
       messageFont.value = selectedFont;
       messageFont2.value = selectedFont;
-
       leftCharacterSearch.value = data.header?.receiverCharacter || "Jonesy";
       rightCharacterSearch.value = data.header?.senderCharacter || "Jonesy";
       senderNickname.value = data.header?.senderNickname || "";
@@ -1730,11 +1724,11 @@ importFile.addEventListener('change', e => {
       (data.messages || []).forEach(m => {
         // Pass the saved font (or fallback) to createMessage → it will be applied immediately
         const row = createMessage(
-          m.content, 
-          m.side, 
-          m.avatar, 
-          m.isImage, 
-          m.styles?.background, 
+          m.content,
+          m.side,
+          m.avatar,
+          m.isImage,
+          m.styles?.background,
           m.styles?.font || selectedFont
         );
         chatBox.append(row);
@@ -1857,7 +1851,6 @@ messageFont2.addEventListener('change', () => {
   messageFont.value = selectedFont;
   applyMessageFont(selectedFont);
 });
-
 const emojis = [
   "😀","😂","😍","😎","😢","🔥","💀","❤️","👍","🙏",
   "🎉","😡","🥶","🤯","😴","👀","💯","⚡","🤔","🥳"
@@ -1896,29 +1889,24 @@ document.addEventListener('click', (e) => {
 function fixViewport() {
   const phone = document.getElementById('phone');
   if (!phone) return;
-
   // Always reset first
   phone.style.transform = 'translateY(0)';
-
   if (window.visualViewport) {
     const vh = window.visualViewport.height;
     const windowHeight = window.innerHeight;
-
     // If keyboard is likely open (visual viewport much smaller)
     if (vh < windowHeight * 0.75) {
-      const offset = (windowHeight - vh) / 2;   // center the phone better
+      const offset = (windowHeight - vh) / 2; // center the phone better
       phone.style.transform = `translateY(-${offset}px)`;
     }
   }
 }
-
 // Listeners
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', fixViewport);
   window.visualViewport.addEventListener('scroll', fixViewport);
 }
 window.addEventListener('resize', fixViewport);
-
 // Also run on focusout (when keyboard closes) with a small delay
 document.addEventListener('focusout', () => {
   setTimeout(() => {
@@ -1927,7 +1915,6 @@ document.addEventListener('focusout', () => {
     fixViewport();
   }, 250);
 });
-
 // Run once on load
 setTimeout(fixViewport, 100);
 //UPLOAD IMAGE TO CHAT//
@@ -1938,11 +1925,10 @@ function triggerFile(side) {
 function handleImageFileInput(side) {
   const fileInput = document.getElementById(`${side}FileInput`);
   const urlInput = document.getElementById(`${side}Image`);
- 
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-   
+  
     const objectUrl = URL.createObjectURL(file);
     urlInput.value = objectUrl;
   });
@@ -1959,13 +1945,11 @@ document.getElementById('rightFileInput').addEventListener('change', (e) => {
 loadEmojis();
 document.addEventListener('keydown', e => { if(e.key === 'Enter') addMessage(); });
 updateAll(); // initial render
-
 // Initialize bottom panel state AFTER everything is loaded
 initBottomPanelState();
 updateChatBoxHeight();
 // Set initial font on page load (in case any messages are added before interaction)
 applyMessageFont(selectedFont);
-
 function showRexxPopup() {
   const popup = document.getElementById('rexxPopup');
   popup.style.display = 'block';
@@ -2014,18 +1998,18 @@ window.addEventListener('load', () => {
 // INSPECT ELEMENT PREVENTION (PASTE AT BOTTOM OF HTML SCRIPT)
 document.addEventListener('contextmenu', e => {
     e.preventDefault();
-   
+  
 });
 document.addEventListener('keydown', function(e) {
     // F12
     if(e.key === 'F12') {
         e.preventDefault();
-       
+      
     }
     // Ctrl+Shift+I / J / C
     if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) {
         e.preventDefault();
-       
+      
     }
 });
 let devtoolsOpen = false;
