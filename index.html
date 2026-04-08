@@ -445,7 +445,7 @@ html, body {
 .collapse-handle:hover {
   background: #4b5563;
 }
-/* ==================== SCROLLABLE CONTENT FOR BOTTOM PANEL (keeps handle always visible) ==================== */
+/* ==================== SCROLLABLE CONTENT FOR BOTTOM PANEL ==================== */
 .bottom-mobile-content {
   flex: 1;
   min-height: 0;
@@ -455,8 +455,17 @@ html, body {
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-top: 16px;   /* This adds extra space right below the handle */
+  gap: 12px;           /* Keeps good spacing between sections */
+  padding: 10px 2px 2px; /* Extra side padding prevents cut-off on focus/selection */
+}
+
+/* Prevent focus ring / selection from being clipped on mobile */
+.bottom-mobile-content input,
+.bottom-mobile-content .input-with-btn input {
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .bottom-mobile-content::-webkit-scrollbar {
   width: 6px;
@@ -713,13 +722,14 @@ border-radius: 20px 20px 0 0; /* keeps top corners rounded */
 .input-with-btn input {
   width: 100%;
   height: 100%; /* fill parent */
-  padding-right: 42px; /* space for button */
-  border-radius: 10px;
+  padding: 13px;
+  padding-right: 40px; /* space for button */
+  border-radius: 8px;
   border: none;
   background: #1f2937;
   color: white;
-  font-size: 15px;
-  box-sizing: border-box; /* critical to prevent shrink */
+  font-size: 15.5px;         /* ← now matches the message inputs */
+  box-sizing: border-box;
 }
 .input-with-btn .upload-btn {
   position: absolute;
@@ -934,6 +944,20 @@ html, body {
   background: #3b82f6;
   color: white;
 }
+
+/* Fix cut-off focus/selection on mobile inputs inside scrollable bottom panel */
+.bottom-mobile-content input {
+  padding-left: 14px;   /* Extra left padding to prevent cut-off */
+  padding-right: 14px;
+  box-sizing: border-box;
+}
+
+/* Ensure inputs don't get clipped by the scroll container */
+.bottom-mobile-content .input-with-btn input,
+.bottom-mobile-content .avatar-input-row input {
+  min-width: 0;
+  width: 100%;
+}
 </style>
 </head>
 <body>
@@ -1124,12 +1148,12 @@ renderPayPalButton('#donate-button-desktop');
   <div class="bottom-mobile-content">
   <div class="inputs">
   <div style="position:relative; flex:1;">
-    <input id="leftInput" placeholder="Receiver message">
+    <input id="leftInput" placeholder="Receiver Message">
     <button class="emoji-btn" onclick="toggleEmojiPicker('left')">😀</button>
     <div class="emoji-picker" id="emojiPickerLeft"></div>
   </div>
   <div style="position:relative; flex:1;">
-    <input id="rightInput" placeholder="Sender message">
+    <input id="rightInput" placeholder="Sender Message">
     <button class="emoji-btn" onclick="toggleEmojiPicker('right')">😀</button>
     <div class="emoji-picker" id="emojiPickerRight"></div>
   </div>
@@ -1137,13 +1161,13 @@ renderPayPalButton('#donate-button-desktop');
   <div class="inputs">
   <!-- Receiver input with upload -->
   <div class="input-with-btn">
-    <input id="leftImage" placeholder="Receiver image URL">
+    <input id="leftImage" placeholder="Receiver Image">
     <button class="upload-btn" onclick="triggerFile('left')">📁</button>
     <input type="file" id="leftFileInput" style="display:none" accept="image/*">
   </div>
   <!-- Sender input with upload -->
   <div class="input-with-btn">
-    <input id="rightImage" placeholder="Sender image URL">
+    <input id="rightImage" placeholder="Sender Image">
     <button class="upload-btn" onclick="triggerFile('right')">📁</button>
     <input type="file" id="rightFileInput" style="display:none" accept="image/*">
   </div>
