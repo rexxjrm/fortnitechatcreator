@@ -35,7 +35,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
 <!--CANONICAL REF FOR GOOGLE--!>
 <link rel="canonical" href="http://www.fortnitechatcreator.com]"/>
 <style>
@@ -969,7 +968,6 @@ html, body {
   min-width: 0;
   width: 100%;
 }
-
 /* ==================== NEW IMAGE INSERT POPUP STYLES ==================== */
 .image-insert-modal {
   position: fixed;
@@ -1069,6 +1067,53 @@ html, body {
   background: #ef4444;
   color: white;
 }
+
+/* ==================== NEW SOCIAL ICON POPUP (LARGE IMAGE) ==================== */
+#socialImagePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#socialImagePopup.show {
+  display: flex;
+}
+#socialImagePopup .popup-inner {
+  position: relative;
+  max-width: 95%;
+  max-height: 95vh;
+}
+#socialImagePopup img {
+  max-width: 100%;
+  max-height: 95vh;
+  border: 12px solid #1f2937;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+}
+#socialImagePopup .close-text {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  color: white;
+  font-size: 18px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 20px;
+  border-radius: 9999px;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+}
+#socialImagePopup .close-text:hover {
+  background: #ef4444;
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
@@ -1142,12 +1187,12 @@ html, body {
       <option value="DynaPuff">DynaPuff</option>
       <option value="Playpen Sans">Playpen Sans</option>
       <option value="Quantico">Quantico</option>
-	  <option value="Pixelify Sans">Pixelify Sans</option>
-	  <option value="Ranchers">Ranchers</option>
-	  <option value="Schoolbell">Schoolbell</option>
-	  <option value="Orbitron">Orbitron</option>
-	  <option value="Concert One">Concert One</option>
-	  <option value="Noto Serif">Noto Serif</option>
+  <option value="Pixelify Sans">Pixelify Sans</option>
+  <option value="Ranchers">Ranchers</option>
+  <option value="Schoolbell">Schoolbell</option>
+  <option value="Orbitron">Orbitron</option>
+  <option value="Concert One">Concert One</option>
+  <option value="Noto Serif">Noto Serif</option>
     </select>
   </div>
   <!-- Donate Box (Mobile Only) -->
@@ -1220,12 +1265,12 @@ title:'PayPal - The safer, easier way to pay online!',
       <option value="DynaPuff">DynaPuff</option>
       <option value="Playpen Sans">Playpen Sans</option>
       <option value="Quantico">Quantico</option>
-	  <option value="Pixelify Sans">Pixelify Sans</option>
-	  <option value="Ranchers">Ranchers</option>
-	  <option value="Schoolbell">Schoolbell</option>
-	  <option value="Orbitron">Orbitron</option>
-	  <option value="Concert One">Concert One</option>
-	  <option value="Noto Serif">Noto Serif</option>
+  <option value="Pixelify Sans">Pixelify Sans</option>
+  <option value="Ranchers">Ranchers</option>
+  <option value="Schoolbell">Schoolbell</option>
+  <option value="Orbitron">Orbitron</option>
+  <option value="Concert One">Concert One</option>
+  <option value="Noto Serif">Noto Serif</option>
     </select>
   </div>
   <div class="control-group">
@@ -1281,13 +1326,11 @@ renderPayPalButton('#donate-button-desktop');
     <div class="emoji-picker" id="emojiPickerRight"></div>
   </div>
 </div>
-
   <!-- NEW IMAGE INSERT BUTTONS (replaces old image URL inputs) -->
   <div class="inputs">
     <button onclick="openImagePopup('left')" style="background:#3b82f6;color:white;flex:1;font-size:15px;">Add Image (Receiver)</button>
     <button onclick="openImagePopup('right')" style="background:#3b82f6;color:white;flex:1;font-size:15px;">Add Image (Sender)</button>
   </div>
-
   <div class="inputs">
     <button class="addBtn" onclick="addMessage()">Add Message</button>
     <button class="clearBtn" id="clearBtn">Clear Chat</button>
@@ -1313,27 +1356,34 @@ renderPayPalButton('#donate-button-desktop');
 </div>
 </div>
 </div>
-
 <!-- ==================== IMAGE INSERT POPUP ==================== -->
 <div id="imageInsertModal" class="image-insert-modal">
   <div class="image-insert-content">
     <h3 id="popupTitle">Add Image</h3>
-    
+   
     <input type="text" id="popupUrlInput" placeholder="Paste image URL here">
-    
+   
     <div class="or">— OR —</div>
-    
+   
     <button class="choose-file-btn" id="popupChooseFileBtn">Choose File from Device</button>
     <input type="file" id="popupFileInput" accept="image/*" style="display:none">
-    
+   
     <div class="preview" id="popupPreview">
       <img id="popupPreviewImg" src="" alt="">
     </div>
-    
+   
     <div class="actions">
       <button class="cancel-btn" onclick="closeImagePopup()">Cancel</button>
       <button class="add-btn" onclick="addImageFromPopup()">Add to Chat</button>
     </div>
+  </div>
+</div>
+
+<!-- ==================== NEW SOCIAL ICON POPUP (LARGE IMAGE) ==================== -->
+<div id="socialImagePopup">
+  <div class="popup-inner">
+    <div onclick="closeSocialPopup()" class="close-text">✕ CLOSE</div>
+    <img src="https://i.imgur.com/jyrRd5p.png" alt="Special Image">
   </div>
 </div>
 
@@ -1432,7 +1482,7 @@ const characters = {
   "Charlotte":"https://static.wikia.nocookie.net/fortnite/images/0/01/Charlotte_-_Outfit_-_Fortnite.png",
   "Slayer Charlotte":"https://static.wikia.nocookie.net/fortnite/images/3/3c/Slayer_Charlotte_-_Outfit_-_Fortnite.png",
   "Serpentbreaker Charlotte":"https://static.wikia.nocookie.net/fortnite/images/5/5b/Serpentbreaker_Charlotte_-_Outfit_-_Fortnite.png",
-  
+ 
   // Add unlimited new characters here, example:
   // ,"New Skin Name": "https://static.wikia.nocookie.net/fortnite/images/...png"
 };
@@ -1766,7 +1816,6 @@ saveBtn.addEventListener('click', async () => {
     const side = row.classList.contains('left') ? 'left' : 'right';
     const msgEl = row.querySelector('.message');
     const isImage = !!msgEl.querySelector('img');
- 
     let content;
     if (isImage) {
       const imgSrc = msgEl.querySelector('img').src;
@@ -1774,7 +1823,6 @@ saveBtn.addEventListener('click', async () => {
     } else {
       content = msgEl.textContent.trim();
     }
- 
     const avatar = row.querySelector('.avatar').src;
     messages.push({
       side,
@@ -2053,7 +2101,6 @@ setTimeout(fixViewport, 100);
 // ==================== NEW IMAGE POPUP LOGIC ====================
 let currentPopupSide = null;
 let currentImageSrc = null;
-
 function openImagePopup(side) {
   currentPopupSide = side;
   document.getElementById('popupTitle').textContent = side === 'left' ? 'Add Image – Receiver' : 'Add Image – Sender';
@@ -2063,19 +2110,16 @@ function openImagePopup(side) {
   document.getElementById('imageInsertModal').classList.add('show');
   <!--document.getElementById('popupUrlInput').focus();--!>
 }
-
 function closeImagePopup() {
   document.getElementById('imageInsertModal').classList.remove('show');
   currentPopupSide = null;
   currentImageSrc = null;
 }
-
 function previewSelectedImage(src) {
   currentImageSrc = src;
   document.getElementById('popupPreviewImg').src = src;
   document.getElementById('popupPreview').style.display = 'flex';
 }
-
 // URL input live preview
 document.getElementById('popupUrlInput').addEventListener('input', () => {
   const url = document.getElementById('popupUrlInput').value.trim();
@@ -2085,12 +2129,10 @@ document.getElementById('popupUrlInput').addEventListener('input', () => {
     document.getElementById('popupPreview').style.display = 'none';
   }
 });
-
 // Choose file button
 document.getElementById('popupChooseFileBtn').addEventListener('click', () => {
   document.getElementById('popupFileInput').click();
 });
-
 document.getElementById('popupFileInput').addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -2113,7 +2155,6 @@ document.getElementById('popupFileInput').addEventListener('change', e => {
     previewSelectedImage(URL.createObjectURL(file));
   }
 });
-
 window.addImageFromPopup = function() {
   if (!currentImageSrc) {
     alert("Please enter a URL or choose a file first.");
@@ -2128,6 +2169,29 @@ window.addImageFromPopup = function() {
   updateAll();
   chatBox.scrollTop = chatBox.scrollHeight;
 };
+
+// ==================== NEW SOCIAL ICON POPUP FUNCTIONS ====================
+function openNewSocialPopup() {
+  const popup = document.getElementById('socialImagePopup');
+  popup.style.display = 'flex';
+}
+
+function closeSocialPopup() {
+  const popup = document.getElementById('socialImagePopup');
+  popup.style.display = 'none';
+}
+
+// Initialize new popup background click handler
+document.addEventListener('DOMContentLoaded', () => {
+  const socialPopup = document.getElementById('socialImagePopup');
+  if (socialPopup) {
+    socialPopup.addEventListener('click', (e) => {
+      if (e.target.id === 'socialImagePopup') {
+        closeSocialPopup();
+      }
+    });
+  }
+});
 
 // Initialize
 loadEmojis();
@@ -2186,18 +2250,17 @@ window.addEventListener('load', () => {
 // INSPECT ELEMENT PREVENTION (PASTE AT BOTTOM OF HTML SCRIPT)
 document.addEventListener('contextmenu', e => {
     e.preventDefault();
- 
 });
 document.addEventListener('keydown', function(e) {
     // F12
     if(e.key === 'F12') {
         e.preventDefault();
-     
+    
     }
     // Ctrl+Shift+I / J / C
     if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) {
         e.preventDefault();
-     
+    
     }
 });
 let devtoolsOpen = false;
@@ -2229,6 +2292,8 @@ setInterval(() => {
   <a href="https://www.tiktok.com/@rexxjrm" target="_blank">
     <img src="https://i.imgur.com/Bab2HWn.png">
   </a>
+  <!-- NEW SOCIAL ICON (next to TikTok, desktop-only, same size/properties, opens large popup) -->
+  <img src="https://i.imgur.com/LBC0rE7.png" onclick="openNewSocialPopup()" alt="New Icon">
 </div>
 </body>
 </html>
