@@ -41,11 +41,8 @@
 <style>
 @font-face {
   font-family: 'Burbank';
-  src: url("https://db.onlinewebfonts.com/t/9f62e2b9b9235acb5512c7f03cf0f792.ttf")format("truetype");
-}
-* {
-  font-family: 'Burbank', Arial, sans-serif;
-  box-sizing: border-box;
+  src: url('/fonts/burbank.woff2') format('woff2'); /* relative or full same-domain URL */
+  font-display: swap; /* prevents invisible text while loading */
 }
 body {
   margin:0;
